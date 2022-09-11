@@ -1,20 +1,26 @@
 const { Schema, model } = require("mongoose");
 
-// TODO: Please make sure you edit the user model to whatever makes sense in this case
+
+
+const { ROLES, USER } = require("../const/index");
 const userSchema = new Schema(
   {
     username: {
-      type: String,
-      // unique: true -> Ideally, should be unique, but its up to you
+      type: { type: String }, unique: true
     },
-    password: String,
+    password: { type: String },
+    avatar: { type: String },
+    friends: { type: Schema.Types.ObjectId, ref: 'users' },
+    role: { type: String, enum: ROLES, default: USER },
+    series: { type: Schema.Types.ObjectId, ref: "series" }
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
+
     timestamps: true,
+    versionKey: false
   }
 );
 
-const User = model("User", userSchema);
+const User = model("users", userSchema);
 
 module.exports = User;
