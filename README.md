@@ -13,7 +13,22 @@ To run the app:
 
 Route | HTTP Verb | Description
 | -- | -- | -- |
-/courses | GET | List all the courses
+/series | GET | Listar todas las series
+/series/:id | GET | Ver una serie
+/series/:id/translate | GET | Traducir una serie
+/series/create | POST | Crear serie (admin)
+/series/:id/delete | GET | Borrar serie (admin)
+/series/:id/editar | POST | Editar serie (admin)
+
+Route | HTTP Verb | Description
+| -- | -- | -- |
+/users | GET | Listar todos los usuarios
+/users/:id | GET | Ver un usuario
+/users/signup | POST | Crear usuario 
+/users/login | POST | Entrar a un usuario 
+/users/:id/delete | GET | Borrar usuario (admin y user)
+/users/:id/editar | POST | Editar usuario (admin y user)
+
 
 ### Despliegue 📦️
 <http://www.loquesea.com>
