@@ -8,15 +8,14 @@ Instrucciones para obtener una copia del proyecto en funcionamiento en tu máqui
 To run the app:
 
     $ npm run dev
-
 ***
-
 ### Endpoints 📍️
 
 Route | HTTP Verb | Description
 | -- | -- | -- |
 /courses | GET | List all the courses
 
+### Despliegue 📦️
 
-### Autores
+### Autores 🖊️
 Jaime, Mario y Marta
