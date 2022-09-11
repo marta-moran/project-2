@@ -1,9 +1,9 @@
 # Name of the project
 Un párrafo que describa lo que es el proyecto
-## Subtitle
+## Comenzando 🚀️
 Instrucciones para obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
-### Prerrequisitos
-    $ npm install<>
+### Prerrequisitos 📋️
+    $ npm install
 
 To run the app:
 
@@ -11,7 +11,7 @@ To run the app:
 
 ***
 
-### Endpoints
+### Endpoints 📍️
 
 Route | HTTP Verb | Description
 | -- | -- | -- |
