@@ -1,0 +1,8 @@
+<div class="container">
+    <h2>Editar a {{username}}</h2>
+    <form action="/users/{{id}}/edit" method="POST">
+        <label for="">Nuevo nombre</label>
+        <input type="text" name="username" placeholder="{{username}}" value="{{username}}">
+        <button type="submit">Editar</button>
+    </form>
+</div>
