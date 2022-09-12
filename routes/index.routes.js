@@ -25,5 +25,13 @@ router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
     .catch((err) => next(err));
 });
 
+router.get("/login", (req, res, next) => {
+  res.render("auth/login")
+})
+
+router.post('/login', (req, res, next) => {
+  const { username, password } = req.body;
+  console.log({ username, password })
+})
 
 module.exports = router;
