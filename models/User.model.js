@@ -6,7 +6,8 @@ const { ROLES, USER } = require("../const/index");
 const userSchema = new Schema(
   {
     username: {
-      type: { type: String }, unique: true
+      type: String,
+      unique: true
     },
     password: { type: String },
     avatar: { type: String },
