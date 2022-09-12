@@ -11,6 +11,11 @@ To run the app:
 ***
 ### Endpoints 📍️
 
+
+Route | HTTP Verb | Description
+| -- | -- | -- |
+/ | GET | Home
+
 Route | HTTP Verb | Description
 | -- | -- | -- |
 /series | GET | Listar todas las series
