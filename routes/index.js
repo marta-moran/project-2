@@ -4,4 +4,6 @@ module.exports = app => {
 
     const usersRoutes = require("./users.routes")
     app.use("/", usersRoutes)
+    const series = require('./routes/series.routes');
+    app.use('/series', series);
 }
