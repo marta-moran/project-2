@@ -5,7 +5,8 @@ module.exports = app => {
     app.use("/", indexRoutes)
 
     const usersRoutes = require("./users.routes")
-    app.use("/users", usersRoutes) //aquí middleware
+    app.use("/users", isLogged(app), usersRoutes)
+
     const series = require('./series.routes');
     app.use('/series', series);
 }
