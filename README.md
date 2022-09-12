@@ -15,6 +15,8 @@ To run the app:
 Route | HTTP Verb | Description
 | -- | -- | -- |
 / | GET | Home
+/signup | POST | Crear usuario 
+/login | POST | Entrar a un usuario 
 
 Route | HTTP Verb | Description
 | -- | -- | -- |
@@ -30,8 +32,6 @@ Route | HTTP Verb | Description
 /users | GET | Listar todos los usuarios
 /users/:id | GET | Ver un usuario
 /users/:id/delete | GET | Borrar usuario (admin y user)
-/users/signup | POST | Crear usuario 
-/users/login | POST | Entrar a un usuario 
 /users/:id/editar | POST | Editar usuario (admin y user)
 
 
