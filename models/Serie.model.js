@@ -3,10 +3,7 @@ const { Schema, model } = require("mongoose");
 
 const serieSchema = new Schema(
     {
-        title: {
-            type: String,
-            unique: true
-        },
+        title: { type: String, unique: true },
         image: { type: String },
         users: { type: Schema.Types.ObjectId, ref: 'Users' },
 

@@ -3,9 +3,7 @@ const { ROLES, USER } = require("../const/index");
 
 const userSchema = new Schema(
   {
-    username: {
-      type: { type: String, unique: true }
-    },
+    username: { type: String, unique: true },
     password: { type: String },
     avatar: { type: String },
     friends: { type: Schema.Types.ObjectId, ref: 'users' },

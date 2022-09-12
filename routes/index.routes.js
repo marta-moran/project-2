@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const UserModel = require('../models/User.model')
-// const bcrypt = require('bcryptjs');
-
+const bcrypt = require('bcryptjs');
 
 /* GET home page */
 router.get("/", (req, res, next) => {

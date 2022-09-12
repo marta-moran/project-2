@@ -1,4 +1,7 @@
 const router = require("express").Router();
-// router.post('/login',)
+
+router.get('/users', (req, res, next) => {
+    res.render('list-users')
+})
 
 module.exports = router;

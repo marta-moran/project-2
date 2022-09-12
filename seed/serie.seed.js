@@ -3,6 +3,7 @@ const SerieModel = require("../models/Serie.model");
 
 
 
+
 const serie = [
     {
         title: "Serie1",
@@ -28,6 +29,7 @@ const serie = [
 
     }
 ];
+
 
 mongoose
     .connect("mongodb://localhost/project-2")
