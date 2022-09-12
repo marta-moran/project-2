@@ -1,13 +1,31 @@
 <div class="container">
-    <h2>Perfil de {{username}}</h2>
-    <p>Nombre: {{username}}</p>
-    <p>Clave: {{password}}</p>
-    <div class="d-flex align-items-center">
-        <div>
-            <a class="btn btn-outline-info" href="/users/{{id}}/edit">Edit</a>
+    <div class="section">
+        <h2>Perfil de <span>{{user.username}}</span></h2>
+        <h3 class="h5">Nombre</h3>
+        <span>{{user.username}}</span>
+        <img class="profile-img" src="{{user.avatar}}">
+
+        {{#if isAdmin}}
+        <div class="d-flex align-items-center">
+            <div>
+                <a class="btn btn-outline-info" href="/users/{{user.id}}/edit">Edit</a>
+            </div>
+            <div class="p-3">
+                <a class="btn btn-outline-danger" href="/users/{{user.id}}/delete">Delete</a>
+            </div>
         </div>
-        <div class="p-3">
-            <a class="btn btn-outline-danger" href="/users/{{id}}/delete">Delete</a>
+        {{/if}}
+
+        {{#if canEdit}}
+        <div class="d-flex align-items-center">
+            <div>
+                <a class="btn btn-outline-info" href="/users/{{user.id}}/edit">Edit</a>
+            </div>
+            <div class="p-3">
+                <a class="btn btn-outline-danger" href="/users/{{user.id}}/delete">Delete</a>
+            </div>
         </div>
+        {{/if}}
     </div>
+
 </div>

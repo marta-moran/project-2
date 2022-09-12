@@ -1,11 +1,43 @@
-body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;700;800;900&display=swap');
+
+.body {
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
 }
 
-a {
-  color: #00b7ff;
+:root {
+  --primary-color: #46A094;
+  --secondary-color: #6BBD99;
+  --third-color: #AECFA4;
+  --fourth-color: #C4E8C2;
+  --text-color: #2a2b2c;
 }
 
-h1 {
-  color: 15px;
+.main-content {
+  margin-top: 50px;
+}
+
+.color-nav {
+  background-color: #46A094;
+}
+
+.color-nav a {
+  color: white;
+}
+
+.color-nav a:hover {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.profile-img {
+  width: 20%;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.section>h2 span {
+  color: var(--secondary-color);
 }

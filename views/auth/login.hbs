@@ -1,35 +1,32 @@
-<div class="container">
+<div class="main-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>Inicio de sesión</h2>
+                <hr>
+                <form action="/login" method="POST">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="emailInput" name="username" placeholder="nombre">
+                    </div>
 
-    <div class="row justify-content-center">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="pwdInput" name="userPwd" placeholder="clave">
+                    </div>
 
-        <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-dark block">Acceder</button>
+                    </div>
 
-            <h2>Inicio de sesión</h2>
-            <hr>
-
-            <form action="/login" method="POST">
-                <div class="mb-3">
-                    <label for="" class="form-label">Nombre de usuario</label>
-                    <input type="text" class="form-control" id="emailInput" name="username">
-                </div>
-
-                <div class="mb-3">
-                    <label for="" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="pwdInput" name="userPwd">
-                </div>
-
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-dark block">Acceder</button>
-                </div>
-
-                {{#if errorMessage}}
-                <div id="errorMessage">
-                    <p>{{errorMessage}}</p>
-                </div>
-                {{/if}}
-
-            </form>
+                    {{#if errorMessage}}
+                    <div id="errorMessage">
+                        <p>{{errorMessage}}</p>
+                    </div>
+                    {{/if}}
+                </form>
+                <p class="text-center py-3">Don't have an account? <a href="/signup">Sign up</a></p>
+            </div>
         </div>
     </div>
-
 </div>
