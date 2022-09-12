@@ -8,11 +8,13 @@
     "seed": "node seed/serie.seed.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cloudinary": "^1.31.0",
-    "bcrypt": "^5.0.1",
+    "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "hbs": "^4.2.0",
     "mongoose": "^6.6.0",
     "morgan": "^1.10.0",
