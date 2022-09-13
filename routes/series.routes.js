@@ -2,6 +2,9 @@ const router = require("express").Router();
 const SeriesModel = require("../models/Serie.model");
 const { ADMIN, USER } = require("../const/index");
 const roleValidation = require("../middleware/roles.middleware");
+const axiosSeries = require("../connect/axios.connect");
+const axiosSerie = new axiosSeries();
+
 
 router.get("/", (req, res, next) => {
 
@@ -17,11 +20,19 @@ router.get("/", (req, res, next) => {
 
 
 router.get("/create", roleValidation(ADMIN), (req, res, next) => {
-    res.render("series/serie-create");
+    axiosSerie
+        .getShows()
+        .then((series) => {
+            // res.json(series);
+
+            res.render("series/serie-create", { series });
+        })
 })
 
 router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
+
     SeriesModel.findById(req.params.id)
+
         .then((serie) => {
             res.render("series/serie-update", serie);
         })
