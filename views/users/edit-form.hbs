@@ -1,10 +1,19 @@
 <div class="main-content">
     <div class="container">
         <h2>Editar a {{username}}</h2>
-        <form action="/users/{{id}}/edit" method="POST">
+        <form action="/users/{{id}}/edit" method="POST" enctype="multipart/form-data">
             <label for="">Nuevo nombre</label>
             <input type="text" name="username" placeholder="{{username}}" value="{{username}}">
+
+            <label>Image:
+                <input type="file" name="avatar" class="form-control-file" />
+                <input type="text" name="existingImage" hidden value="{{avatar}}"> </label>
             <button type="submit">Editar</button>
         </form>
+        {{#if errorMessage}}
+        <div id="errorMessage">
+            <p>{{errorMessage}}</p>
+        </div>
+        {{/if}}
     </div>
 </div>
