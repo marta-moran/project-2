@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const SeriesModel = require("../models/Serie.model")
+const { ADMIN, USER } = require('../const/index');
 
 router.get("/", (req, res, next) => {
+    let isAdmin = false
 
     SeriesModel.find()
         .then((series) => {
@@ -12,7 +14,6 @@ router.get("/", (req, res, next) => {
             console.log(err);
         })
 })
-
 
 router.get("/create", (req, res, next) => {
     res.render("series/serie-create");
@@ -30,10 +31,15 @@ router.get("/:id/edit", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
 
+    let isAdmin = false
+    console.log(req.session.currentUser.role)
     SeriesModel.findById(req.params.id)
         .then((serie) => {
             console.log(serie);
-            res.render("series/serie-watch", serie)
+            if (req.session.currentUser.role === ADMIN) {
+                isAdmin = true
+            }
+            res.render("series/serie-watch", { serie, isAdmin })
         })
         .catch((err) => console.log(err));
 })
@@ -73,18 +79,12 @@ router.post("/create", (req, res, next) => {
 
 router.post("/:id/edit", (req, res, next) => {
     const { title } = req.body;
-    SeriesModel.findByIdAndUpdate(req.params.id, title)
+    SeriesModel.findByIdAndUpdate(req.params.id, { title })
         .then((serie) => {
-            res.redirect("/series", serie)
+            res.redirect("/series")
         })
         .catch((err) => next(err));
 })
-
-
-
-
-
-
 
 
 module.exports = router;
