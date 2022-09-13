@@ -12,5 +12,5 @@ module.exports = app => {
     app.use("/users", isLogged(app), usersRoutes)
 
     const series = require('./series.routes');
-    app.use('/series', series);
+    app.use('/series', isLogged(app), series);
 }
