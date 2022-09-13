@@ -43,21 +43,6 @@ router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
         })
 })
 
-router.get("/:id", (req, res, next) => {
-
-    let isAdmin = false
-    console.log(req.session.currentUser.role)
-    SeriesModel.findById(req.params.id)
-        .then((serie) => {
-            console.log(serie);
-            if (req.session.currentUser.role === ADMIN) {
-                isAdmin = true
-            }
-            res.render("series/serie-watch", { serie, isAdmin })
-        })
-        .catch((err) => console.log(err));
-})
-
 
 router.get("/:id/translate", (req, res, next) => {
 
@@ -89,6 +74,32 @@ router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
 })
 
 
+router.get('/:id/join', (req, res, next) => {
+    SeriesModel.updateOne({ _id: req.params.id }, { $addToSet: { users: req.session.currentUser._id } })
+        .then((course) => {
+            console.log("Uses joined the course")
+            res.redirect(`/series/${req.params.id}`)
+        })
+        .catch((err) => next(err))
+})
+
+router.get("/:id", (req, res, next) => {
+
+    let isAdmin = false
+    console.log(req.session.currentUser.role)
+    SeriesModel.findById(req.params.id)
+        .populate('users')
+        .then((serie) => {
+            console.log(serie);
+            if (req.session.currentUser.role === ADMIN) {
+                isAdmin = true
+            }
+            console.log(serie)
+
+            res.render("series/serie-watch", { serie, isAdmin })
+        })
+        .catch((err) => console.log(err));
+})
 
 // Crear y editar POST
 

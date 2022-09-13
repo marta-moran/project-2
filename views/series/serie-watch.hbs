@@ -3,6 +3,13 @@
         <h1>Watching {{serie.title}}</h1>
         <img src="{{serie.image}}" alt="serie">
 
+        <p>USERS:</p>
+        <ul>
+            {{#each serie.users}}
+            <li><a href="/users/{{_id}}">{{this.username}}</a></li>
+            {{/each}}
+        </ul>
+
         {{#if isAdmin}}
         <a href="/series/{{serie._id}}/edit">Edit serie</a>
         {{/if}}

@@ -17,6 +17,7 @@ router.get('/:id', (req, res, next) => {
     let canEdit = false
 
     User.findById(req.params.id)
+        .populate('friends')
         .then((user) => {
             if (req.session.currentUser.role === ADMIN) {
                 isAdmin = true
@@ -30,6 +31,7 @@ router.get('/:id', (req, res, next) => {
             next(err);
         });
 })
+
 
 router.get('/:id/edit', (req, res, next) => {
     // console.log(req.session.currentUser.role !== ADMIN)
