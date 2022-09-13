@@ -38,7 +38,7 @@ router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
       .then(hashedPassword => User.create({ username, password: hashedPassword, avatar: image }))
       .then(createdUser => res.redirect('/login'))
       .catch(error => {
-        console.log(error._message)
+        console.log(error)
         if (error.code === 11000) {
           // console.log('User validation failed')
           res.render('auth/signup', { errorMessage: 'El usuario ya existe' })

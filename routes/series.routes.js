@@ -1,6 +1,15 @@
 const router = require("express").Router();
+<<<<<<< HEAD
 const SeriesModel = require("../models/Serie.model")
 const { ADMIN, USER } = require('../const/index');
+=======
+const SeriesModel = require("../models/Serie.model");
+const { ADMIN, USER } = require("../const/index");
+const roleValidation = require("../middleware/roles.middleware");
+const axiosSeries = require("../connect/axios.connect");
+const axiosSerie = new axiosSeries();
+
+>>>>>>> e141deb120443cd51eece07c19c74eaad2598d5b
 
 router.get("/", (req, res, next) => {
     let isAdmin = false
@@ -15,12 +24,26 @@ router.get("/", (req, res, next) => {
         })
 })
 
+<<<<<<< HEAD
 router.get("/create", (req, res, next) => {
     res.render("series/serie-create");
+=======
+
+router.get("/create", roleValidation(ADMIN), (req, res, next) => {
+    axiosSerie
+        .getShows()
+        .then((series) => {
+            // res.json(series);
+
+            res.render("series/serie-create", { series });
+        })
+>>>>>>> e141deb120443cd51eece07c19c74eaad2598d5b
 })
 
-router.get("/:id/edit", (req, res, next) => {
+router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
+
     SeriesModel.findById(req.params.id)
+
         .then((serie) => {
             res.render("series/serie-update", serie);
         })
@@ -55,7 +78,7 @@ router.get("/:id/translate", (req, res, next) => {
         .catch((err) => console.log(err));
 })
 
-router.get("/:id/delete", (req, res, next) => {
+router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
 
     SeriesModel.findByIdAndDelete(req.params.id)
         .then((serie) => {
@@ -80,8 +103,13 @@ router.post("/create", (req, res, next) => {
 router.post("/:id/edit", (req, res, next) => {
     const { title } = req.body;
     SeriesModel.findByIdAndUpdate(req.params.id, { title })
+<<<<<<< HEAD
         .then((serie) => {
             res.redirect("/series")
+=======
+        .then(() => {
+            res.redirect("/series");
+>>>>>>> e141deb120443cd51eece07c19c74eaad2598d5b
         })
         .catch((err) => next(err));
 })
