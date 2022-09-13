@@ -4,6 +4,12 @@
         <h3 class="h5">Nombre</h3>
         <span>{{user.username}}</span>
         <img class="profile-img" src="{{user.avatar}}">
+        <p>Friends</p>
+        <ul>
+            {{#each friends}}
+            <li><a href="/users/{{_id}}">{{username}}</a></li>
+            {{/each}}
+        </ul>
 
         {{#if isAdmin}}
         <div class="d-flex align-items-center">
