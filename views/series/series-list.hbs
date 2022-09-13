@@ -1,17 +1,27 @@
 <div class="main-content">
     <div class="container">
-        {{#if isAdmin}}
-        <a class="button text-light text-decoration-none" href="/series/create">Crear serie</a>
-        {{/if}}
-        {{#each favSeries}}
-        <div class="my-4">
-            <h2>{{title}}</h2>
-            <img src="{{image}}" alt="image">
-            <a href="/series/{{_id}}">Ver más</a>
-            {{#if fav}}
-            <p>HOLI</p>
+        <div class="text-end">
+            {{#if isAdmin}}
+            <a class="button text-light text-decoration-none" href="/series/create">Crear serie</a>
             {{/if}}
         </div>
-        {{/each}}
+        <div class="row">
+            {{#each series}}
+            <div class="col-6">
+                <div class="card my-4">
+                    <div class="p-4">
+                        <img class="img-serie" src="{{image}}" alt="image">
+                        <h2 class="h3 mb-4">{{title}}</h2>
+                        <a class="button-small text-decoration-none text-light" href="/series/{{_id}}">Ver más</a>
+                        <a class="button-small text-decoration-none text-light" href="#">Jugar</a>
+                        <a href="#"><img src="https://www.systemuicons.com/images/icons/heart.svg"></a>
+                    </div>
+                </div>
+            </div>
+            {{!-- {{#if fav}}
+            <p>HOLI</p>
+            {{/if}} --}}
+            {{/each}}
+        </div>
     </div>
 </div>
