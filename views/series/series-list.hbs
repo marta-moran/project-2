@@ -14,7 +14,11 @@
                         <h2 class="h3 mb-4">{{title}}</h2>
                         <a class="button-small text-decoration-none text-light" href="/series/{{_id}}">Ver más</a>
                         <a class="button-small text-decoration-none text-light" href="#">Jugar</a>
-                        <a href="#"><img src="https://www.systemuicons.com/images/icons/heart.svg"></a>
+                        {{#if fav}}
+                        <a href="/series/{{_id}}/dislike"><img src="images/heart-fill.png" alt=""></a>
+                        {{else}}
+                        <a href="/series/{{_id}}/like"><img src="images/heart-line.png" alt=""></a>
+                        {{/if}}
                     </div>
                 </div>
             </div>

@@ -105,7 +105,7 @@ router.get('/:id/like', (req, res, next) => {
         })
         .then(() => {
 
-            res.redirect(`/series/${req.params.id}`)
+            res.redirect(`/series`)
 
         })
         .catch((err) => next(err))
@@ -165,14 +165,12 @@ router.get("/:id", (req, res, next) => {
 // Crear y editar POST
 
 router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
-    const { title, existingImage } = req.body;
+    const { title } = req.body;
     const slugTrans = slugger(title);
-    let image = ''
+    let image = undefined
 
     if (req.file && req.file.path) {
         image = req.file.path;
-    } else {
-        image = existingImage;
     }
 
     SeriesModel.create({ title, slug: slugTrans, image: image })
