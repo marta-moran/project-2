@@ -1,5 +1,7 @@
 const router = require("express").Router();
-const SeriesModel = require("../models/Serie.model")
+const SeriesModel = require("../models/Serie.model");
+const { ADMIN, USER } = require("../const/index");
+const roleValidation = require("../middleware/roles.middleware");
 
 router.get("/", (req, res, next) => {
 
@@ -14,11 +16,11 @@ router.get("/", (req, res, next) => {
 })
 
 
-router.get("/create", (req, res, next) => {
+router.get("/create", roleValidation(ADMIN), (req, res, next) => {
     res.render("series/serie-create");
 })
 
-router.get("/:id/edit", (req, res, next) => {
+router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
     SeriesModel.findById(req.params.id)
         .then((serie) => {
             res.render("series/serie-update", serie);
@@ -49,7 +51,7 @@ router.get("/:id/translate", (req, res, next) => {
         .catch((err) => console.log(err));
 })
 
-router.get("/:id/delete", (req, res, next) => {
+router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
 
     SeriesModel.findByIdAndDelete(req.params.id)
         .then((serie) => {
@@ -73,9 +75,9 @@ router.post("/create", (req, res, next) => {
 
 router.post("/:id/edit", (req, res, next) => {
     const { title } = req.body;
-    SeriesModel.findByIdAndUpdate(req.params.id, title)
-        .then((serie) => {
-            res.redirect("/series", serie)
+    SeriesModel.findByIdAndUpdate(req.params.id, { title })
+        .then(() => {
+            res.redirect("/series");
         })
         .catch((err) => next(err));
 })
