@@ -6,9 +6,9 @@ const userSchema = new Schema(
     username: { type: String, unique: true },
     password: { type: String },
     avatar: { type: String },
-    friends: { type: Schema.Types.ObjectId, ref: 'users' },
+    friends: [{ type: Schema.Types.ObjectId, ref: 'users' }],
     role: { type: String, enum: ROLES, default: USER },
-    series: { type: Schema.Types.ObjectId, ref: "series" }
+    series: [{ type: Schema.Types.ObjectId, ref: "series" }]
   },
   {
 

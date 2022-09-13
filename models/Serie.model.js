@@ -6,7 +6,7 @@ const serieSchema = new Schema(
         title: { type: String, unique: true },
         image: { type: String },
         slug: { type: String },
-        users: { type: Schema.Types.ObjectId, ref: 'Users' },
+        users: [{ type: Schema.Types.ObjectId, ref: 'users' }],
 
     },
     {
