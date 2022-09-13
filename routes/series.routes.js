@@ -107,10 +107,18 @@ router.get("/:id", (req, res, next) => {
 
 // Crear y editar POST
 
-router.post("/create", (req, res, next) => {
-    const { title } = req.body;
+router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
+    const { title, existingImage } = req.body;
     const slugTrans = slugger(title);
-    SeriesModel.create({ title, slug: slugTrans })
+    let image = ''
+
+    if (req.file && req.file.path) {
+        image = req.file.path;
+    } else {
+        image = existingImage;
+    }
+
+    SeriesModel.create({ title, slug: slugTrans, image: image })
         .then(() => {
             res.redirect("/series");
         })
@@ -120,19 +128,16 @@ router.post("/create", (req, res, next) => {
 
 router.post("/:id/edit", multerMiddleware.single('image'), (req, res, next) => {
     const { title, existingImage } = req.body
-    console.log("EEEE: " + existingImage)
     let image = ''
 
     if (req.file && req.file.path) {
         image = req.file.path;
-        console.log("hola")
     } else {
         image = existingImage;
     }
 
     SeriesModel.findByIdAndUpdate(req.params.id, { title, image: image }, { new: true })
         .then((serieUpdate) => {
-            console.log("SERIE NUEVA ACTUALIZADA -->" + serieUpdate)
             res.redirect("/series")
         })
         .catch((err) => next(err));
