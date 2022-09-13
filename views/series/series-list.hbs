@@ -1,6 +1,14 @@
-<h1>This works</h1>
-{{#each series}}
-<h1>{{title}}</h1>
-<img src="{{image}}" alt="image">
-<a href="/series/{{_id}}">Ver más</a>
-{{/each}}
+<div class="main-content">
+    <div class="container">
+        {{#if isAdmin}}
+        <a class="button text-light text-decoration-none" href="/series/create">Crear serie</a>
+        {{/if}}
+        {{#each series}}
+        <div class="my-4">
+            <h2>{{title}}</h2>
+            <img src="{{image}}" alt="image">
+            <a href="/series/{{_id}}">Ver más</a>
+        </div>
+        {{/each}}
+    </div>
+</div>

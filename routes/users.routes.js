@@ -23,7 +23,6 @@ router.get('/:id', (req, res, next) => {
             } else if (req.session.currentUser._id.toString() === req.params.id.toString()) {
                 canEdit = true
             }
-            // console.log({ user, isAdmin, canEdit })
             res.render('users/view-user', { user, isAdmin, canEdit })
         })
         .catch((err) => {
@@ -32,8 +31,7 @@ router.get('/:id', (req, res, next) => {
 })
 
 router.get('/:id/edit', (req, res, next) => {
-    // console.log(req.session.currentUser.role !== ADMIN)
-    // console.log(req.session.currentUser._id.toString() !== req.params.id.toString())
+
     console.log("GET username--->", req.app.locals.currentUsername)
 
     if (req.session.currentUser.role === ADMIN || req.session.currentUser._id.toString() === req.params.id.toString()) {
@@ -48,7 +46,7 @@ router.get('/:id/edit', (req, res, next) => {
 
 })
 
-router.post('/:id/edit', multerMiddleware.single('avatar'), (req, res, next) => {
+router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
     const { username, existingImage } = req.body;
     console.log(username, existingImage)
     let image = '';
@@ -59,7 +57,7 @@ router.post('/:id/edit', multerMiddleware.single('avatar'), (req, res, next) => 
         image = existingImage;
     }
     console.log("Image-->", image)
-    User.findByIdAndUpdate(req.params.id, { username, avatar: image }, { new: true })
+    User.findByIdAndUpdate(req.params.id, { username, image: image }, { new: true })
         .then((userUpdate) => {
             // console.log(userUpdate)
             req.session.currentUser = userUpdate

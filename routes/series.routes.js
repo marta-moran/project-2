@@ -2,6 +2,7 @@ const router = require("express").Router();
 const SeriesModel = require("../models/Serie.model");
 const { ADMIN, USER } = require("../const/index");
 const roleValidation = require("../middleware/roles.middleware");
+const multerMiddleware = require('../middleware/multer.middleware');
 const axiosSeries = require("../connect/axios.connect");
 const axiosSerie = new axiosSeries();
 
@@ -11,8 +12,11 @@ router.get("/", (req, res, next) => {
 
     SeriesModel.find()
         .then((series) => {
+            if (req.session.currentUser.role === ADMIN) {
+                isAdmin = true
+            }
             console.log(series)
-            res.render("series/series-list", { series })
+            res.render("series/series-list", { series, isAdmin })
         })
         .catch((err) => {
             console.log(err);
@@ -90,14 +94,26 @@ router.post("/create", (req, res, next) => {
 })
 
 
-router.post("/:id/edit", (req, res, next) => {
-    const { title } = req.body;
-    SeriesModel.findByIdAndUpdate(req.params.id, { title })
-        .then((serie) => {
+router.post("/:id/edit", multerMiddleware.single('image'), (req, res, next) => {
+    const { title, existingImage } = req.body
+    console.log("EEEE: " + existingImage)
+    let image = ''
+
+    if (req.file && req.file.path) {
+        image = req.file.path;
+        console.log("hola")
+    } else {
+        image = existingImage;
+    }
+
+    SeriesModel.findByIdAndUpdate(req.params.id, { title, image: image }, { new: true })
+        .then((serieUpdate) => {
+            console.log("SERIE NUEVA ACTUALIZADA -->" + serieUpdate)
             res.redirect("/series")
         })
         .catch((err) => next(err));
 })
+
 
 
 module.exports = router;

@@ -4,12 +4,15 @@
             <div class="col-md-6">
                 <h1>Actualizar Serie</h1>
                 <hr>
-                <form action="/series/{{_id}}/edit" method="POST">
+                <form action="/series/{{_id}}/edit" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <div class="col">
                             <label class="form-label">Título</label>
-                            <input type="text" class="form-control" id="emailInput" name="title" value="{{title}}">
-                            <div class="form-text">Requerido.</div>
+                            <input type="text" class="form-control mb-4" id="emailInput" name="title" value="{{title}}"
+                                required>
+                            <label for="image">Image</label>
+                            <input type="file" name="image" class="form-control-file" />
+                            <input type="text" name="existingImage" hidden value="{{image}}">
                         </div>
                         <button class="btn btn-dark block my-3" type="submit">Actualizar</button>
                         <a class="btn btn-dark block my-3" href="/series/{{_id}}/delete">Delete</a>

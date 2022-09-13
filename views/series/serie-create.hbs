@@ -1,42 +1,32 @@
-<div class="container">
+<div class="main-content">
+    <div class="container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h1>Crear Serie</h1>
+                    <hr>
+                    <form action="/series/create" method="POST">
+                        <div class="mb-3 row">
+                            <div class="col">
+                                <label class="form-label">Título</label>
 
-    <div class="row justify-content-center">
+                                <select name="series">
+                                    {{#each series}}
+                                    <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <button class="btn btn-dark block" type="submit">Crear</button>
+                        </div>
 
-        <div class="col-md-6">
-
-            <h1>Crear Serie</h1>
-            <hr>
-
-
-            <form action="/series/create" method="POST">
-
-                <div class="mb-3 row">
-                    <div class="col">
-                        <label class="form-label">Título</label>
-
-                        <select name="series">
-                            {{#each series}}
-                            <option value="{{_id}}">{{name}}</option>
-                            {{/each}}
-                        </select>
-
-                        <div class="form-text">Requerido.</div>
-                    </div>
-                    <button type="submit">Crear</button>
-
+                        {{#if errorMessage}}
+                        <div id="errorMessage">
+                            <p>{{errorMessage}}</p>
+                        </div>
+                        {{/if}}
+                    </form>
                 </div>
-
-
-
-                {{#if errorMessage}}
-                <div id="errorMessage">
-                    <p>{{errorMessage}}</p>
-                </div>
-                {{/if}}
-
-            </form>
-
+            </div>
         </div>
     </div>
-
 </div>
