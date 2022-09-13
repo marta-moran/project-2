@@ -6,6 +6,7 @@ const multerMiddleware = require('../middleware/multer.middleware');
 const axiosSeries = require("../connect/axios.connect");
 const axiosSerie = new axiosSeries();
 const slugger = require("../utils/slugTransform");
+const User = require('../models/User.model')
 
 
 router.get("/", (req, res, next) => {
@@ -16,8 +17,25 @@ router.get("/", (req, res, next) => {
             if (req.session.currentUser.role === ADMIN) {
                 isAdmin = true
             }
-            console.log(series)
-            res.render("series/series-list", { series, isAdmin })
+            const userfav = req.session.currentUser.series
+            // console.log("Userfav--->", userfav)
+            const favSeries = series.map((serie) => {
+                // console.log(serie)
+                if (userfav.includes(serie._id.toString())) {
+                    // console.log(true)
+                    serie.fav = true
+
+                } else {
+                    // console.log(false)
+                    serie.fav = false
+                }
+                // console.log("Serie--->", serie.fav)
+                return serie
+            })
+
+            // console.log("FavSerie--->", favSeries)
+            // console.log(favSeries[6].fav)
+            res.render("series/series-list", { favSeries, isAdmin })
         })
         .catch((err) => {
             console.log(err);
@@ -78,13 +96,52 @@ router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
 })
 
 
-router.get('/:id/join', (req, res, next) => {
-    SeriesModel.updateOne({ _id: req.params.id }, { $addToSet: { users: req.session.currentUser._id } })
-        .then((course) => {
-            console.log("Uses joined the course")
+router.get('/:id/like', (req, res, next) => {
+    SeriesModel.findByIdAndUpdate(req.params.id, { $addToSet: { users: req.session.currentUser._id } }, { new: true })
+        .then((serie) => {
+            console.log("User joined the course")
+            req.session.currentUser.series.push(serie._id)
+            return User.updateOne({ _id: req.session.currentUser._id }, { $addToSet: { series: req.params.id } })
+        })
+        .then(() => {
+
             res.redirect(`/series/${req.params.id}`)
+
         })
         .catch((err) => next(err))
+})
+
+router.get('/:id/dislike', (req, res, next) => {
+    SeriesModel.findById(req.params.id)
+        .then((serie) => {
+            const index = serie.users.indexOf(req.session.currentUser._id.toString())
+            // console.log(index)
+
+            if (index !== -1) {
+                const newusers = serie.users.splice(index, 1)
+            }
+            return SeriesModel.findByIdAndUpdate(req.params.id, serie, { new: true })
+        })
+        .then((updatedSerie) => {
+            console.log(updatedSerie)
+            const indexUser = req.session.currentUser.series.indexOf(req.params.id.toString())
+
+            if (indexUser !== -1) {
+                console.log(req.session.currentUser)
+                req.session.currentUser.series.splice(indexUser, 1)
+                console.log(req.session.currentUser)
+            }
+
+            return User.findByIdAndUpdate(req.session.currentUser._id, req.session.currentUser, { new: true })
+
+        })
+        .then((updatedUser) => {
+            console.log(updatedUser)
+            req.session.currentUser = updatedUser
+            res.redirect('/series')
+        })
+
+        .catch(err => next(err))
 })
 
 router.get("/:id", (req, res, next) => {
@@ -94,11 +151,11 @@ router.get("/:id", (req, res, next) => {
     SeriesModel.findById(req.params.id)
         .populate('users')
         .then((serie) => {
-            console.log(serie);
+            // console.log(serie);
             if (req.session.currentUser.role === ADMIN) {
                 isAdmin = true
             }
-            console.log(serie)
+            console.log("SERIES-->", serie)
 
             res.render("series/serie-watch", { serie, isAdmin })
         })
@@ -108,6 +165,7 @@ router.get("/:id", (req, res, next) => {
 // Crear y editar POST
 
 router.post("/create", (req, res, next) => {
+    console.log(req.body)
     const { title } = req.body;
     const slugTrans = slugger(title);
     SeriesModel.create({ title, slug: slugTrans })

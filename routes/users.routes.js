@@ -5,7 +5,6 @@ const multerMiddleware = require('../middleware/multer.middleware');
 
 router.get('/', (req, res, next) => {
     User.find()
-    User.find()
         .then(users => {
             res.render('users/list-users', { users })
         })
@@ -17,8 +16,9 @@ router.get('/:id', (req, res, next) => {
     let canEdit = false
 
     User.findById(req.params.id)
-        .populate('friends')
+        .populate('series')
         .then((user) => {
+            console.log(user)
             if (req.session.currentUser.role === ADMIN) {
                 isAdmin = true
             } else if (req.session.currentUser._id.toString() === req.params.id.toString()) {
@@ -46,6 +46,10 @@ router.get('/:id/edit', (req, res, next) => {
         res.redirect('/login')
     }
 
+})
+
+router.get('/:id/follow', (req, res, next) => {
+    User.findByIdAndUpdate(req.session.currentUser._id,)
 })
 
 router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
