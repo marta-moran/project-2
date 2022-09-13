@@ -164,14 +164,8 @@ router.get("/:id", (req, res, next) => {
 
 // Crear y editar POST
 
-<<<<<<< HEAD
-router.post("/create", (req, res, next) => {
-    console.log(req.body)
-    const { title } = req.body;
-=======
 router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
     const { title, existingImage } = req.body;
->>>>>>> marta
     const slugTrans = slugger(title);
     let image = ''
 
