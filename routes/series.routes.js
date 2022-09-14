@@ -7,6 +7,8 @@ const axiosSeries = require("../connect/axios.connect");
 const axiosSerie = new axiosSeries();
 const slugger = require("../utils/slugTransform");
 const User = require('../models/User.model')
+const deepl = require("deepl-node")
+
 
 
 router.get("/", (req, res, next) => {
@@ -53,6 +55,16 @@ router.get("/create", roleValidation(ADMIN), (req, res, next) => {
         })
 })
 
+
+router.get('/getphrase', (req, res, next) => {
+    const words = req.app.locals.esPhrase
+    const phrase = req.app.locals.enPhrase
+    const id = req.app.locals.currentSerieId
+    console.log({ words, phrase, id })
+
+    res.json({ words, phrase, id })
+})
+
 router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
 
     SeriesModel.findById(req.params.id)
@@ -66,23 +78,39 @@ router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
 })
 
 
-router.get("/:id/translate", (req, res, next) => {
+router.get("/:id/translate", async (req, res, next) => {
+    try {
+        req.app.locals.currentSerieId = req.params.id
 
-    SeriesModel.findById(req.params.id)
-        .then((serie) => {
-            axiosSerie
-                .getQuote(serie.slug)
-                .then((phrase) => {
+        const serie = await SeriesModel.findById(req.params.id)
 
-                    res.render("series/serie-translate", phrase)
-                })
+        console.log(serie.slug)
 
-        })
+        const phrase = await axiosSerie.getQuote(serie.slug)
 
-        .catch((err) => console.log(err));
+        const enPhrase = phrase.quote
+        req.app.locals.enPhrase = enPhrase
+
+        console.log(phrase)
+
+        const translator = new deepl.Translator(process.env.API_KEY);
+
+        const result = await translator.translateText(enPhrase, null, 'es');
 
 
+        const words = result.text.split(" ")
+        console.log("words ---> ", words)
+        req.app.locals.esPhrase = words
 
+        const shuffledWords = [...words].sort(compare)
+        function compare(a, b) {
+            return 0.5 - Math.random();
+        }
+
+        res.render("series/serie-translate", { words: shuffledWords, phrase: enPhrase })
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
