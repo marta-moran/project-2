@@ -4,10 +4,10 @@
         <h3 class="h5">Nombre</h3>
         <span>{{user.username}}</span>
         <img class="profile-img" src="{{user.avatar}}">
-        <p>Friends</p>
+        <p>Series</p>
         <ul>
-            {{#each friends}}
-            <li><a href="/users/{{_id}}">{{username}}</a></li>
+            {{#each user.series}}
+            <li><a href="/series/{{this._id}}">{{this.title}}</a></li>
             {{/each}}
         </ul>
 

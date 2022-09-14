@@ -53,6 +53,13 @@
   font-size: 25px;
 }
 
+.button-small {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #AECFA4;
+  font-size: 18px;
+}
+
 
 .color-nav {
   background-color: #46A094;
@@ -118,6 +125,11 @@
   }
 }
 
-img {
+.img-serie {
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.img-serie-profile {
   width: 20%;
 }
