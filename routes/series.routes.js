@@ -60,9 +60,10 @@ router.get('/getphrase', (req, res, next) => {
     const words = req.app.locals.esPhrase
     const phrase = req.app.locals.enPhrase
     const id = req.app.locals.currentSerieId
+    const userId = req.session.currentUser._id
     console.log({ words, phrase, id })
 
-    res.json({ words, phrase, id })
+    res.json({ words, phrase, id, userId })
 })
 
 router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {

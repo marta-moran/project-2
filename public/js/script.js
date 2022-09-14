@@ -68,10 +68,14 @@ async function getPhrase() {
     const enPhrase = res.data.phrase
     const esPhrase = res.data.words
     const id = res.data.id
+    const userId = res.data.userId
 
     console.log(checkPhrase(phrase, esPhrase))
 
     if (checkPhrase(phrase, esPhrase)) {
+      const points = phrase.length
+      const res = await axios.post(`http://localhost:3000/users/${userId}/points`, { points })
+      console.log("res--->", res)
       window.location.href = `http://localhost:3000/series/${id}/translate`
     }
 

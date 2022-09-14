@@ -52,6 +52,20 @@ router.get('/:id/follow', (req, res, next) => {
     User.findByIdAndUpdate(req.session.currentUser._id,)
 })
 
+router.get('/:id/delete', (req, res, next) => {
+    if (req.session.currentUser.role !== ADMIN || req.session.currentUser._id.toString() !== req.params.id.toString()) {
+        res.redirect('/login')
+    }
+    User.findByIdAndDelete(req.params.id)
+        .then((deleteUser) => {
+            console.log(deleteUser)
+            res.redirect('/users')
+        })
+        .catch((err) => {
+            next(err);
+        });
+})
+
 router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
     const { username, existingImage } = req.body;
     console.log(username, existingImage)
@@ -85,18 +99,21 @@ router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
         });
 })
 
-router.get('/:id/delete', (req, res, next) => {
-    if (req.session.currentUser.role !== ADMIN || req.session.currentUser._id.toString() !== req.params.id.toString()) {
-        res.redirect('/login')
-    }
-    User.findByIdAndDelete(req.params.id)
-        .then((deleteUser) => {
-            console.log(deleteUser)
-            res.redirect('/users')
+router.post('/:id/points', (req, res, next) => {
+    console.log("Body--->", req.body.points)
+    const points = req.session.currentUser.points + req.body.points
+
+    User.findByIdAndUpdate(req.params.id, { points: points }, { new: true })
+        .then((updatedUser) => {
+            req.session.currentUser = updatedUser
+            res.sendStatus(200)
         })
-        .catch((err) => {
-            next(err);
-        });
+
+        .catch((err) => console.log(err))
+    // req.app.locals.points = points
 })
+
+
+
 
 module.exports = router;
