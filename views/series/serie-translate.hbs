@@ -1,1 +1,24 @@
-<p>{{quote}}</p>
+<div class="main-content">
+    <div class="container">
+        <h1>{{phrase}}</h1>
+        <div id="btn-div">
+            <h2>botones:</h2>
+            {{#each words}}
+            <button class="word">{{this}}</button>
+            {{/each}}
+        </div>
+
+        <div id="phrase">
+            <h2>Tu frase:</h2>
+        </div>
+
+        <button id="check">COMPROBAR</button>
+
+        <a href="/series">SALIR</a>
+    </div>
+</div>
+
+
+
+
+<script src="/js/script.js"></script>
