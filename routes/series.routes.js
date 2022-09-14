@@ -80,9 +80,6 @@ router.get("/:id/translate", (req, res, next) => {
         })
 
         .catch((err) => console.log(err));
-
-
-
 })
 
 router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
