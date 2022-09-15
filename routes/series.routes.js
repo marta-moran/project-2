@@ -101,12 +101,8 @@ router.get("/:id/translate", async (req, res, next) => {
         function compare(a, b) {
             return 0.5 - Math.random();
         }
-<<<<<<< HEAD
-        const shuffledWords = words.sort(compare)
-=======
         const shuffledWords = [...words].sort(compare);
 
->>>>>>> fc9cc840986c09da9a1bbf31909cbe01c5a84e25
         res.render("series/serie-translate", { words: shuffledWords, phrase: enPhrase, character, show })
     } catch (err) {
         next(err)
