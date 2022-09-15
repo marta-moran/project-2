@@ -1,7 +1,9 @@
 <div class="main-content">
     <div class="container">
         <div id="title-phrase">
-            <h2>{{phrase}}</h2>
+            <h2 class="h4">{{phrase}}</h2>
+            <h3 class="h4 text-muted text-end mb-3"><i>{{character}}</i><span><strong>&nbsp&nbsp{{show}}</strong></span>
+            </h3>
         </div>
         <div id="btn-div">
             {{#each words}}
@@ -11,14 +13,12 @@
 
         <div id="phrase">
             <div>
-                <h2>Tu frase:</h2>
                 <div class="result">
-
                 </div>
             </div>
         </div>
 
-        <div class="buttons-options mt-4">
+        <div class="buttons-options mt-2">
             <button class="button-small text-light mt-5" id="check">&nbspCHECK&nbsp</button>
             <a class="btn-dark text-decoration-none text-light text-end" href="/series">&nbspSALIR&nbsp</a>
         </div>

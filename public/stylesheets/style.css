@@ -13,7 +13,6 @@ body {
 
 }
 
-
 .main-content a {
   color: #46A094;
 }
@@ -34,6 +33,10 @@ body {
   text-align: center;
   font-weight: 700;
 }
+
+/* .main-content h2 {
+  text-align: center;
+} */
 
 .home {
   display: flex;
@@ -129,6 +132,17 @@ body {
   border-radius: 50%;
 }
 
+.userList {
+  width: 40vw;
+  height: auto;
+}
+
+.title-user {
+  text-align: center;
+  margin-top: 25px;
+}
+
+
 /* ERRORES */
 #errorMessage {
   background-color: rgb(255, 202, 202);
@@ -201,13 +215,22 @@ body {
 }
 
 #phrase>div {
-  margin: 50px 0;
+  height: 150px;
+  margin: 50px 0 10px 0;
 }
 
 .result {
-  margin: 30px 0 0 0;
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: end;
+  width: 70%;
+  justify-content: center;
+  margin: 0 auto
+}
+
+.result span {
+  margin-top: 5px;
 }
 
 /* #phrase>h2 {
@@ -233,12 +256,13 @@ body {
   margin: 0px 10px 0px 0;
   color: var(--text-color);
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .btn-frase {
   padding: 10px;
   background-color: var(--secondary-color);
-  margin: 5px 10px 20px 0;
+  margin: 5px 10px 5px 0;
   color: white;
   font-weight: 600;
   border-radius: 10px;
@@ -246,7 +270,7 @@ body {
 }
 
 #title-phrase {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -263,4 +287,16 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   margin: 0 auto
+}
+
+.line {
+  border-top: 2px solid var(--primary-color);
+  height: 2px;
+  max-width: 100%;
+  padding: 0;
+  margin: 20px 0;
+}
+
+#title-phrase h3 span {
+  color: var(--secondary-color);
 }

@@ -9,14 +9,14 @@ document.addEventListener(
 );
 
 function getbtns() {
-  const div = document.querySelector('#phrase')
   const otrodiv = document.querySelector('.result')
   const btns = document.querySelectorAll('.word')
   console.log(btns)
   for (let btn of btns) {
+
     btn.addEventListener('click', () => {
       const paragraph = document.createElement('span')
-      paragraph.setAttribute('class', 'btn-translate')
+      paragraph.setAttribute('class', 'btn-translate') //
       paragraph.textContent = btn.textContent
       otrodiv.appendChild(paragraph)
       btn.remove()
@@ -26,16 +26,16 @@ function getbtns() {
 }
 
 function getLastBtns() {
-  const div = document.querySelector('#phrase')
   const otrodiv = document.querySelector('.result')
   const btns = document.querySelectorAll('.word')
   console.log(btns)
-  btns[btns.length - 1].addEventListener('click', () => {
+  const lastBtn = btns[btns.length - 1];
+  lastBtn.addEventListener('click', () => {
     const paragraph = document.createElement('span')
     paragraph.setAttribute('class', 'btn-translate')
-    paragraph.textContent = btns[btns.length - 1].textContent
+    paragraph.textContent = lastBtn.textContent
     otrodiv.appendChild(paragraph)
-    btns[btns.length - 1].remove()
+    lastBtn.remove()
     getLastParagraphs()
   })
 
@@ -45,13 +45,17 @@ function getLastParagraphs() {
   const divBtn = document.querySelector('#btn-div')
   const ps = document.querySelectorAll('span')
   console.log(ps)
-
-  ps[ps.length - 1].addEventListener('click', () => {
+  const lastP = ps[ps.length - 1];
+  lastP.addEventListener('click', () => {
     const btn = document.createElement('button')
     btn.setAttribute('class', 'word btn-frase')
+<<<<<<< HEAD
     btn.textContent = ps[ps.length - 1].textContent
+=======
+    btn.textContent = lastP.textContent
+>>>>>>> 605060adfe62e52a6838c46391c3f0465c41fa67
     divBtn.appendChild(btn)
-    ps[ps.length - 1].remove()
+    lastP.remove()
     console.log("GET BTNS")
     getLastBtns()
   })
@@ -69,10 +73,12 @@ async function getPhrase() {
     const res = await axios.get('http://localhost:3000/series/getphrase')
 
     console.log(res.data.phrase)
-    const enPhrase = res.data.phrase
-    const esPhrase = res.data.words
-    const id = res.data.id
-    const userId = res.data.userId
+    // destructurar
+    const { phrase: enPhrase, words: esPhrase, id, userId } = res.data;
+    // const enPhrase = res.data.phrase
+    // const esPhrase = res.data.words
+    // const id = res.data.id
+    // const userId = res.data.userId
 
     console.log(checkPhrase(phrase, esPhrase))
 
@@ -83,21 +89,19 @@ async function getPhrase() {
       window.location.href = `http://localhost:3000/series/${id}/translate`
     }
 
-
   } catch (err) {
     console.log(err)
   }
+
 }
+
 
 function checkPhrase(phrase, ogPhrase) {
 
   const phrase1 = phrase.join(" ");
   const phrase2 = ogPhrase.join(" ");
   console.log(phrase1, phrase2);
-  if (phrase1 === phrase2) {
-    return true
-  } else {
-    return false;
-  }
+  return phrase1 === phrase2
+
 
 }
