@@ -13,6 +13,18 @@ router.get('/', (req, res, next) => {
         .catch(error => next(error))
 })
 
+router.get('/main-page', (req, res, next) => {
+    const user = req.session.currentUser
+    SerieModel.find()
+        .then(series => {
+            console.log("LAS SERIES:" + series)
+            series[0].bol = true
+            res.render('users/main-page', { user, series })
+        })
+})
+
+
+
 router.get('/:id', (req, res, next) => {
     let isAdmin = false
     let canEdit = false
