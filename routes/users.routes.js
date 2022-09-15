@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require('../models/User.model')
 const { ADMIN, USER } = require('../const/index');
 const multerMiddleware = require('../middleware/multer.middleware');
+const SerieModel = require('../models/Serie.model')
 
 router.get('/', (req, res, next) => {
     User.find()
@@ -24,6 +25,7 @@ router.get('/:id', (req, res, next) => {
             } else if (req.session.currentUser._id.toString() === req.params.id.toString()) {
                 canEdit = true
             }
+            console.log(user)
             res.render('users/view-user', { user, isAdmin, canEdit })
         })
         .catch((err) => {
@@ -52,23 +54,38 @@ router.get('/:id/follow', (req, res, next) => {
     User.findByIdAndUpdate(req.session.currentUser._id,)
 })
 
-router.get('/:id/delete', (req, res, next) => {
-    if (req.session.currentUser.role !== ADMIN || req.session.currentUser._id.toString() !== req.params.id.toString()) {
-        res.redirect('/login')
+router.get('/:id/delete', async (req, res, next) => {
+    try {
+        if (req.session.currentUser._id.toString() === req.params.id.toString() || req.session.currentUser.role === ADMIN) {
+            const seriesUsers = await SerieModel.find().select('users')
+            console.log(seriesUsers)
+
+            for (let serieUsers of seriesUsers) {
+                console.log(serieUsers)
+                if (serieUsers.users.includes(req.params.id)) {
+                    const index = serieUsers.users.indexOf(req.params.id)
+                    const newUsers = serieUsers.users.splice(index, 1)
+                    const serie = await SerieModel.findByIdAndUpdate(serieUsers._id, { users: serieUsers.users })
+                    console.log(serie, { new: true })
+                }
+            }
+            const deletedUser = await User.findByIdAndDelete(req.params.id)
+            res.redirect('/logout')
+        } else {
+            console.log(req.session.currentUser._id.toString() !== req.params.id.toString())
+            console.log(req.session.currentUser.role !== ADMIN)
+            console.log('No puedes hacer esto')
+            res.redirect('/login')
+
+        }
+    } catch (err) {
+        next(err)
     }
-    User.findByIdAndDelete(req.params.id)
-        .then((deleteUser) => {
-            console.log(deleteUser)
-            res.redirect('/users')
-        })
-        .catch((err) => {
-            next(err);
-        });
 })
 
 router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
-    const { username, existingImage } = req.body;
-    console.log(username, existingImage)
+    const { username, existingImage, description } = req.body;
+    console.log(req.body)
     let image = '';
 
     if (req.file && req.file.path) {
@@ -77,7 +94,7 @@ router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
         image = existingImage;
     }
     console.log("Image-->", image)
-    User.findByIdAndUpdate(req.params.id, { username, image: image }, { new: true })
+    User.findByIdAndUpdate(req.params.id, { username, avatar: image, description }, { new: true })
         .then((userUpdate) => {
             // console.log(userUpdate)
             req.session.currentUser = userUpdate
@@ -90,8 +107,12 @@ router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
             res.redirect(`/users/${req.params.id}`)
         })
         .catch((err) => {
+            console.log("Message--->", err.message)
             if (err.code === 11000) {
                 res.render('users/edit-form', { errorMessage: 'Username already in use' })
+
+            } else if (err.message === 'Image file format webp not allowed') {
+                res.render('users/edit-form', { errorMessage: 'Image format invalid' })
 
             } else {
                 next(err);

@@ -1,17 +1,37 @@
 <div class="main-content">
     <div class="container">
-        <h1>Watching {{serie.title}}</h1>
-        <img class="img-serie-profile" src="{{serie.image}}" alt="serie">
+        <h1>Watching: <span class="serieTitle">{{serie.title}}</span></h1>
 
-        <p>USERS:</p>
-        <ul>
-            {{#each serie.users}}
-            <li><a href="/users/{{_id}}">{{this.username}}</a></li>
-            {{/each}}
-        </ul>
+        <div class="row">
+            <div class="col-4">
+                <p>FOLLOWERS:</p>
+                <ul>
+                    {{#each serie.users}}
+                    <li><a href="/users/{{_id}}">{{this.username}}</a></li>
+                    {{/each}}
+                </ul>
 
-        {{#if isAdmin}}
-        <a href="/series/{{serie._id}}/edit">Edit serie</a>
-        {{/if}}
+                <div class="p-3">
+                    <a class="btn user-edit-button " href="/series/{{serie.id}}/translate">Jugar</a>
+                </div>
+
+                {{#if isAdmin}}
+                <div class="p-3">
+                    <a class="btn user-edit-button " href="/series/{{serie.id}}/edit">Edit</a>
+                </div>
+                {{/if}}
+            </div>
+            <div class="col">
+                <img style="width: 100%; height: 80%" src="{{serie.image}}" alt="serie">
+                <p>Descripcion:</p>
+                <p>{{serie.description}}</p>
+
+
+            </div>
+        </div>
+
+
+
+
     </div>
 </div>

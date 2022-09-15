@@ -117,7 +117,11 @@ body {
   margin-top: 20px;
 }
 
-.section>h2 span {
+.section h2 span {
+  color: var(--secondary-color);
+}
+
+.serieTitle {
   color: var(--secondary-color);
 }
 
@@ -169,10 +173,34 @@ body {
   width: 20%;
 }
 
-#phrase {
-  margin: 0 auto;
-  height: 100px;
-  width: 80%;
+.user-edit-button {
+  transition-duration: 0.4s;
+  background-color: white;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color)
+}
+
+.user-edit-button:hover {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  /* Green */
+  color: white;
+  font-weight: 300;
+}
+
+.user-delete-button {
+  transition-duration: 0.4s;
+  background-color: white;
+  color: rgb(247, 78, 78);
+  border: 1px solid rgb(247, 78, 78);
+}
+
+.user-delete-button:hover {
+  background-color: rgb(247, 78, 78);
+  border: 1px solid rgb(247, 78, 78);
+  /* Green */
+  color: white;
+  font-weight: 300;
 }
 
 #phrase>div {
