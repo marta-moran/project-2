@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const SeriesModel = require("../models/Serie.model");
-const { ADMIN, USER } = require("../const/index");
+const { ADMIN } = require("../const/index");
 const roleValidation = require("../middleware/roles.middleware");
 const multerMiddleware = require('../middleware/multer.middleware');
 const axiosSeries = require("../connect/axios.connect");
@@ -8,6 +8,8 @@ const axiosSerie = new axiosSeries();
 const slugger = require("../utils/slugTransform");
 const User = require('../models/User.model')
 const deepl = require("deepl-node")
+const userAdmin = require("../utils/isAdmin")
+const translator = new deepl.Translator(process.env.API_KEY);
 
 
 
@@ -16,31 +18,27 @@ router.get("/", (req, res, next) => {
 
     SeriesModel.find()
         .then((series) => {
-            if (req.session.currentUser.role === ADMIN) {
+            if (userAdmin(req)) {
                 isAdmin = true
             }
             const userfav = req.session.currentUser.series
-            // console.log("Userfav--->", userfav)
-            const favSeries = series.map((serie) => {
-                // console.log(serie)
-                if (userfav.includes(serie._id.toString())) {
-                    // console.log(true)
-                    serie.fav = true
+            console.log(userfav);
 
+            const favSeries = series.map((serie) => {
+                if (userfav.includes(serie._id.toString())) {
+                    serie.fav = true
                 } else {
-                    // console.log(false)
                     serie.fav = false
                 }
-                // console.log("Serie--->", serie.fav)
-                return serie
+                console.log(serie.fav)
+                console.log(serie.title)
+                return serie;
             })
-
-            // console.log("FavSerie--->", favSeries)
-            // console.log(favSeries[6].fav)
             res.render("series/series-list", { favSeries, isAdmin })
         })
         .catch((err) => {
-            console.log(err);
+            next(err);
+
         })
 })
 
@@ -49,8 +47,6 @@ router.get("/create", roleValidation(ADMIN), (req, res, next) => {
     axiosSerie
         .getShows()
         .then((series) => {
-            // res.json(series);
-
             res.render("series/serie-create", { series });
         })
 })
@@ -61,8 +57,6 @@ router.get('/getphrase', (req, res, next) => {
     const phrase = req.app.locals.enPhrase
     const id = req.app.locals.currentSerieId
     const userId = req.session.currentUser._id
-    console.log({ words, phrase, id })
-
     res.json({ words, phrase, id, userId })
 })
 
@@ -82,32 +76,21 @@ router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
 router.get("/:id/translate", async (req, res, next) => {
     try {
         req.app.locals.currentSerieId = req.params.id
-
         const serie = await SeriesModel.findById(req.params.id)
-
         console.log(serie.slug)
-
         const phrase = await axiosSerie.getQuote(serie.slug)
-
         const enPhrase = phrase.quote
         req.app.locals.enPhrase = enPhrase
-
         console.log(phrase)
 
-        const translator = new deepl.Translator(process.env.API_KEY);
-
         const result = await translator.translateText(enPhrase, null, 'es');
-
-
         const words = result.text.split(" ")
         console.log("words ---> ", words)
         req.app.locals.esPhrase = words
-
-        const shuffledWords = [...words].sort(compare)
         function compare(a, b) {
             return 0.5 - Math.random();
         }
-
+        const shuffledWords = [...words].sort(compare)
         res.render("series/serie-translate", { words: shuffledWords, phrase: enPhrase })
     } catch (err) {
         next(err)
@@ -116,12 +99,20 @@ router.get("/:id/translate", async (req, res, next) => {
 
 router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
 
-    SeriesModel.findByIdAndDelete(req.params.id)
+    //await SerieModel.findOneAndUpdate({ users: { $in: [req.params.id] } }, { $pull: { users: req.params.id } })
+    //const deletedUser = await User.findByIdAndDelete(userId)
+    User.findOneAndUpdate({ series: { $in: [req.params.id] } }, {
+        $pull: { series: req.params.id }
+
+    })
+        .then(() => {
+            return SeriesModel.findByIdAndDelete(req.params.id);
+        })
         .then((serie) => {
             console.log(serie);
             res.redirect("/series")
         })
-        .catch((err) => console.log(err));
+        .catch((err) => next(err));
 })
 
 
@@ -141,37 +132,54 @@ router.get('/:id/like', (req, res, next) => {
 })
 
 router.get('/:id/dislike', (req, res, next) => {
-    SeriesModel.findById(req.params.id)
+    User.findOneAndUpdate({ series: { $in: [req.params.id] } }, { $pull: { series: req.params.id } }, { new: true })
+        .then((updateUser) => {
+            req.session.currentUser = updateUser;
+            return SeriesModel.findByIdAndUpdate(req.params.id, {
+                $pull: { users: req.session.currentUser._id }
+            })
+        })
         .then((serie) => {
-            const index = serie.users.indexOf(req.session.currentUser._id.toString())
-            // console.log(index)
-
-            if (index !== -1) {
-                const newusers = serie.users.splice(index, 1)
-            }
-            return SeriesModel.findByIdAndUpdate(req.params.id, serie, { new: true })
+            console.log(serie);
+            res.redirect("/series")
         })
-        .then((updatedSerie) => {
-            console.log(updatedSerie)
-            const indexUser = req.session.currentUser.series.indexOf(req.params.id.toString())
+        .catch((err) => next(err));
 
-            if (indexUser !== -1) {
-                console.log(req.session.currentUser)
-                req.session.currentUser.series.splice(indexUser, 1)
-                console.log(req.session.currentUser)
-            }
-
-            return User.findByIdAndUpdate(req.session.currentUser._id, req.session.currentUser, { new: true })
-
-        })
-        .then((updatedUser) => {
-            console.log(updatedUser)
-            req.session.currentUser = updatedUser
-            res.redirect('/series')
-        })
-
-        .catch(err => next(err))
 })
+
+
+
+// SeriesModel.findById(req.params.id)
+//     .then((serie) => {
+//         const index = serie.users.indexOf(req.session.currentUser._id.toString())
+
+
+//         if (index !== -1) {
+//             const newusers = serie.users.splice(index, 1)
+//         }
+//         return SeriesModel.findByIdAndUpdate(req.params.id, serie, { new: true })
+//     })
+// .then((updatedSerie) => {
+//     // solo una llamada a la BD
+//     console.log(updatedSerie)
+//     const indexUser = req.session.currentUser.series.indexOf(req.params.id.toString())
+//     if (indexUser !== -1) {
+//         console.log(req.session.currentUser)
+//         req.session.currentUser.series.splice(indexUser, 1)
+//         console.log(req.session.currentUser)
+//     }
+
+//     return User.findByIdAndUpdate(req.session.currentUser._id, req.session.currentUser, { new: true })
+
+// })
+// .then((updatedUser) => {
+//     console.log(updatedUser)
+//     req.session.currentUser = updatedUser
+//     res.redirect('/series')
+// })
+
+// .catch(err => next(err))
+// })
 
 router.get("/:id", (req, res, next) => {
 
@@ -181,7 +189,7 @@ router.get("/:id", (req, res, next) => {
         .populate('users')
         .then((serie) => {
             console.log(serie);
-            if (req.session.currentUser.role === ADMIN) {
+            if (userAdmin(req)) {
                 isAdmin = true
             }
             console.log("SERIES-->", serie)
@@ -191,9 +199,10 @@ router.get("/:id", (req, res, next) => {
         .catch((err) => console.log(err));
 })
 
-// Crear y editar POST
 
-router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
+
+
+router.post("/create", multerMiddleware.single('image'), roleValidation(ADMIN), (req, res, next) => {
     const { title, description } = req.body;
     const slugTrans = slugger(title);
     let image = undefined
@@ -210,7 +219,8 @@ router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
 })
 
 
-router.post("/:id/edit", multerMiddleware.single('image'), (req, res, next) => {
+
+router.post("/:id/edit", multerMiddleware.single('image'), roleValidation(ADMIN), (req, res, next) => {
     const { title, existingImage, description } = req.body
     console.log(description)
     let image = ''

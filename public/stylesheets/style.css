@@ -247,6 +247,7 @@ body {
   margin: 0px 10px 0px 0;
   color: var(--text-color);
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .btn-frase {
