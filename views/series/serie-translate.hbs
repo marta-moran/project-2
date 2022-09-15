@@ -1,20 +1,27 @@
 <div class="main-content">
     <div class="container">
-        <h1>{{phrase}}</h1>
+        <div id="title-phrase">
+            <h2>{{phrase}}</h2>
+        </div>
         <div id="btn-div">
-            <h2>botones:</h2>
             {{#each words}}
-            <button class="word">{{this}}</button>
+            <button class="word btn-frase">{{this}}</button>
             {{/each}}
         </div>
 
         <div id="phrase">
-            <h2>Tu frase:</h2>
+            <div>
+                <h2>Tu frase:</h2>
+                <div class="result">
+
+                </div>
+            </div>
         </div>
 
-        <button id="check">COMPROBAR</button>
-
-        <a href="/series">SALIR</a>
+        <div class="buttons-options mt-4">
+            <button class="button-small text-light mt-5" id="check">&nbspCHECK&nbsp</button>
+            <a class="btn-dark text-decoration-none text-light text-end" href="/series">&nbspSALIR&nbsp</a>
+        </div>
     </div>
 </div>
 

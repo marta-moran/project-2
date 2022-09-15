@@ -9,14 +9,16 @@ document.addEventListener(
 );
 
 function getbtns() {
-  const div = document.querySelector('#phrase')
+  // const div = document.querySelector('#phrase')
+  const otrodiv = document.querySelector('.result')
   const btns = document.querySelectorAll('.word')
   console.log(btns)
   for (let btn of btns) {
     btn.addEventListener('click', () => {
-      const paragraph = document.createElement('p')
+      const paragraph = document.createElement('span')
+      paragraph.setAttribute('class', 'btn-translate') //
       paragraph.textContent = btn.textContent
-      div.appendChild(paragraph)
+      otrodiv.appendChild(paragraph)
       btn.remove()
       getLastParagraphs()
     })
@@ -24,13 +26,15 @@ function getbtns() {
 }
 
 function getLastBtns() {
-  const div = document.querySelector('#phrase')
+  // const div = document.querySelector('#phrase')
+  const otrodiv = document.querySelector('.result')
   const btns = document.querySelectorAll('.word')
   console.log(btns)
   btns[btns.length - 1].addEventListener('click', () => {
-    const paragraph = document.createElement('p')
+    const paragraph = document.createElement('span')
+    paragraph.setAttribute('class', 'btn-translate')
     paragraph.textContent = btns[btns.length - 1].textContent
-    div.appendChild(paragraph)
+    otrodiv.appendChild(paragraph)
     btns[btns.length - 1].remove()
     getLastParagraphs()
   })
@@ -39,12 +43,12 @@ function getLastBtns() {
 
 function getLastParagraphs() {
   const divBtn = document.querySelector('#btn-div')
-  const ps = document.querySelectorAll('p')
+  const ps = document.querySelectorAll('span')
   console.log(ps)
 
   ps[ps.length - 1].addEventListener('click', () => {
     const btn = document.createElement('button')
-    btn.setAttribute('class', 'word')
+    btn.setAttribute('class', 'word btn-frase')
     btn.textContent = ps[ps.length - 1].textContent
     divBtn.appendChild(btn)
     ps[ps.length - 1].remove()
@@ -56,7 +60,7 @@ function getLastParagraphs() {
 
 async function getPhrase() {
   try {
-    let ps = document.querySelectorAll('#phrase p')
+    let ps = document.querySelectorAll('#phrase span')
     const phrase = []
     for (let p of ps) {
       phrase.push(p.textContent)
