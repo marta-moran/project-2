@@ -41,8 +41,11 @@ router.get('/logout', (req, res, next) => {
 
 
 router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
-  const { username, userPwd, description } = req.body;
-  console.log(req.body)
+  let { username, userPwd, description } = req.body;
+  if (description === "") {
+    description = undefined
+  }
+  console.log(req.body.description)
 
   let image = undefined;
   if (req.file && req.file.path) {

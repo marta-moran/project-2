@@ -182,9 +182,12 @@ router.get("/:id", (req, res, next) => {
 
 
 router.post("/create", multerMiddleware.single('image'), roleValidation(ADMIN), (req, res, next) => {
-    const { title, description } = req.body;
+    let { title, description } = req.body;
     const slugTrans = slugger(title);
     let image = undefined
+    if (description === "") {
+        description = undefined
+    }
 
     if (req.file && req.file.path) {
         image = req.file.path;

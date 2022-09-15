@@ -9,7 +9,7 @@ const serieSchema = new Schema(
         },
         slug: { type: String },
         users: [{ type: Schema.Types.ObjectId, ref: 'users' }],
-        description: { type: String, default: "Este tio no se ha visto la serie" }
+        description: { type: String, default: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, modi! Possimus enim, earum quidem, fugit similique minima beatae, eligendi non facere excepturi suscipit ea corrupti. Neque vero architecto provident sint?" }
     },
     {
         timestamps: true,
