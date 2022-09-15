@@ -38,7 +38,11 @@ router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
       .genSalt(saltRounds)
       .then(salt => bcrypt.hash(userPwd, salt))
       .then(hashedPassword => User.create({ username, password: hashedPassword, avatar: image, description }))
-      .then(createdUser => res.redirect('/login'))
+      .then((createdUser) => {
+        console.log(createdUser)
+        req.session.currentUser = createdUser
+        res.redirect(`/users/${createdUser._id}`)
+      })
       .catch(error => {
         console.log(error)
         if (error.code === 11000) {
@@ -72,6 +76,19 @@ router.post('/login', (req, res, next) => {
       }
     })
     .catch(error => next(error))
+})
+
+router.post('/setlanguage', (req, res, next) => {
+  console.log(req.body)
+  const { language } = req.body
+  User.findByIdAndUpdate(req.session.currentUser._id, { language }, { new: true })
+    .then((updatedUser) => {
+      console.log(updatedUser)
+      req.session.currentUser = updatedUser
+      req.app.locals.language = updatedUser.language
+      res.sendStatus(200)
+    })
+    .catch((err) => next(err))
 })
 
 module.exports = router;

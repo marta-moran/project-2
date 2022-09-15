@@ -49,6 +49,13 @@ router.get("/create", roleValidation(ADMIN), (req, res, next) => {
         .then((series) => {
             res.render("series/serie-create", { series });
         })
+        .catch((err) => {
+            if (err.code === 11000) {
+                res.render("series/serie-create", { errorMessage: 'La serie ya existe' })
+            } else {
+                next(err)
+            }
+        })
 })
 
 router.get('/getphrase', (req, res, next) => {
@@ -85,13 +92,14 @@ router.get("/:id/translate", async (req, res, next) => {
 
         console.log(phrase)
 
-        const result = await translator.translateText(enPhrase, null, 'es');
+        const result = await translator.translateText(enPhrase, null, req.session.currentUser.language);
         const words = result.text.split(" ")
         console.log("words ---> ", words)
         req.app.locals.esPhrase = words
         function compare(a, b) {
             return 0.5 - Math.random();
         }
+        const shuffledWords = words.sort(compare)
         res.render("series/serie-translate", { words: shuffledWords, phrase: enPhrase, character, show })
     } catch (err) {
         next(err)

@@ -49,11 +49,7 @@ function getLastParagraphs() {
   lastP.addEventListener('click', () => {
     const btn = document.createElement('button')
     btn.setAttribute('class', 'word btn-frase')
-<<<<<<< HEAD
-    btn.textContent = ps[ps.length - 1].textContent
-=======
     btn.textContent = lastP.textContent
->>>>>>> 605060adfe62e52a6838c46391c3f0465c41fa67
     divBtn.appendChild(btn)
     lastP.remove()
     console.log("GET BTNS")
