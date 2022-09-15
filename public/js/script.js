@@ -9,14 +9,14 @@ document.addEventListener(
 );
 
 function getbtns() {
-  const div = document.querySelector('#phrase')
+  // const div = document.querySelector('#phrase')
   const otrodiv = document.querySelector('.result')
   const btns = document.querySelectorAll('.word')
   console.log(btns)
   for (let btn of btns) {
     btn.addEventListener('click', () => {
       const paragraph = document.createElement('span')
-      paragraph.setAttribute('class', 'btn-translate')
+      paragraph.setAttribute('class', 'btn-translate') //
       paragraph.textContent = btn.textContent
       otrodiv.appendChild(paragraph)
       btn.remove()
@@ -26,7 +26,7 @@ function getbtns() {
 }
 
 function getLastBtns() {
-  const div = document.querySelector('#phrase')
+  // const div = document.querySelector('#phrase')
   const otrodiv = document.querySelector('.result')
   const btns = document.querySelectorAll('.word')
   console.log(btns)
@@ -48,8 +48,7 @@ function getLastParagraphs() {
 
   ps[ps.length - 1].addEventListener('click', () => {
     const btn = document.createElement('button')
-    btn.setAttribute('class', 'word')
-    btn.setAttribute('class', 'btn-frase')
+    btn.setAttribute('class', 'word btn-frase')
     btn.textContent = ps[ps.length - 1].textContent
     divBtn.appendChild(btn)
     ps[ps.length - 1].remove()

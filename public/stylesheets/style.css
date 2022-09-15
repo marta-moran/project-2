@@ -13,7 +13,6 @@ body {
 
 }
 
-
 .main-content a {
   color: #46A094;
 }
@@ -34,6 +33,10 @@ body {
   text-align: center;
   font-weight: 700;
 }
+
+/* .main-content h2 {
+  text-align: center;
+} */
 
 .home {
   display: flex;
@@ -173,7 +176,7 @@ body {
 }
 
 #phrase>div {
-  margin: 50px 0;
+  margin: 100px 0;
 }
 
 .result {
@@ -235,4 +238,12 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   margin: 0 auto
+}
+
+.line {
+  border-top: 2px solid var(--primary-color);
+  height: 2px;
+  max-width: 100%;
+  padding: 0;
+  margin: 20px 0;
 }
