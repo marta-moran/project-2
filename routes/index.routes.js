@@ -2,12 +2,28 @@ const router = require("express").Router();
 const bcrypt = require('bcryptjs');
 const multerMiddleware = require('../middleware/multer.middleware');
 const User = require('../models/User.model')
+const SeriesModel = require("../models/Serie.model")
 const hasNumber = require('../utils/hasNumber')
 const saltRounds = 10
 
 /* GET home page */
 router.get("/", (req, res, next) => {
-  res.render("index");
+
+  res.render("index")
+  // SeriesModel.find()
+  //   .then((serieFollow) => {
+
+  //     serieFollow.sort(function (a, b) {
+  //       return b.users.length - a.users.length;
+  //     })
+  //     console.log(serieFollow)
+  //     const orderSeries = serieFollow.slice(0, 3);
+  //     // res.json(orderSeries);
+  //     res.render("index", { orderSeries });
+
+  //     // res.json(orderSeries);
+  //   })
+  //   .catch((err) => console.log(err))
 });
 
 // Sign up
@@ -38,7 +54,11 @@ router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
       .genSalt(saltRounds)
       .then(salt => bcrypt.hash(userPwd, salt))
       .then(hashedPassword => User.create({ username, password: hashedPassword, avatar: image, description }))
-      .then(createdUser => res.redirect('/login'))
+      .then((createdUser) => {
+        console.log(createdUser)
+        req.session.currentUser = createdUser
+        res.redirect(`/users/${createdUser._id}`)
+      })
       .catch(error => {
         console.log(error)
         if (error.code === 11000) {
@@ -72,6 +92,19 @@ router.post('/login', (req, res, next) => {
       }
     })
     .catch(error => next(error))
+})
+
+router.post('/setlanguage', (req, res, next) => {
+  console.log(req.body)
+  const { language } = req.body
+  User.findByIdAndUpdate(req.session.currentUser._id, { language }, { new: true })
+    .then((updatedUser) => {
+      console.log(updatedUser)
+      req.session.currentUser = updatedUser
+      req.app.locals.language = updatedUser.language
+      res.sendStatus(200)
+    })
+    .catch((err) => next(err))
 })
 
 module.exports = router;

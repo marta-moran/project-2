@@ -16,10 +16,16 @@ router.get('/', (req, res, next) => {
 router.get('/main-page', (req, res, next) => {
     const user = req.session.currentUser
     SerieModel.find()
-        .then(series => {
-            console.log("LAS SERIES:" + series)
-            series[0].bol = true
-            res.render('users/main-page', { user, series })
+        .then((serieFollow) => {
+
+            serieFollow.sort(function (a, b) {
+                return b.users.length - a.users.length;
+            })
+            console.log(serieFollow)
+            const orderSeries = serieFollow.slice(0, 3);
+            // res.json(orderSeries);
+            orderSeries[0].bol = true
+            res.render('users/main-page', { user, orderSeries })
         })
 })
 

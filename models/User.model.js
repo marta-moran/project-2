@@ -12,7 +12,8 @@ const userSchema = new Schema(
     role: { type: String, enum: ROLES, default: USER },
     series: [{ type: Schema.Types.ObjectId, ref: "series" }],
     points: { type: Number, default: 0 },
-    description: { type: String, default: "Traduciendo...🚀️" }
+    description: { type: String, default: "Traduciendo...🚀️" },
+    language: { type: String, default: 'es' }
   },
   {
 
