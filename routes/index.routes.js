@@ -8,20 +8,22 @@ const saltRounds = 10
 
 /* GET home page */
 router.get("/", (req, res, next) => {
-  SeriesModel.find()
-    .then((serieFollow) => {
 
-      serieFollow.sort(function (a, b) {
-        return b.users.length - a.users.length;
-      })
-      console.log(serieFollow)
-      const orderSeries = serieFollow.slice(0, 3);
-      console.log(orderSeries);
-      res.render("index");
+  res.render("index")
+  // SeriesModel.find()
+  //   .then((serieFollow) => {
 
-      // res.json(orderSeries);
-    })
-    .catch((err) => console.log(err))
+  //     serieFollow.sort(function (a, b) {
+  //       return b.users.length - a.users.length;
+  //     })
+  //     console.log(serieFollow)
+  //     const orderSeries = serieFollow.slice(0, 3);
+  //     // res.json(orderSeries);
+  //     res.render("index", { orderSeries });
+
+  //     // res.json(orderSeries);
+  //   })
+  //   .catch((err) => console.log(err))
 });
 
 // Sign up
