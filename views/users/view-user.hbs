@@ -1,55 +1,58 @@
 <div class="container">
-    <div class="section">
-        <div class="row">
-            <div class="col">
-                <h2>Perfil de <span>{{user.username}}</span></h2>
-                <img style="width: 50%; height: 50%;" src="{{user.avatar}}">
-                {{!-- class="profile-img" --}}
-
-                <p class="mt-2">Puntos: {{user.points}} pts.</p>
-
-                <p>Descripcion:</p>
-                <p>{{user.description}}</p>
-
-                {{#if isAdmin}}
-                <div class="d-flex align-items-center">
-                    <div class="p-3">
-                        <a class="btn user-edit-button " href="/users/{{user.id}}/edit">Edit</a>
-                    </div>
-                    <div class="p-3">
-                        <a class="btn user-delete-button" href="/users/{{user.id}}/delete">Delete</a>
-                    </div>
-                </div>
-                {{/if}}
-
-                {{#if canEdit}}
-                <div class="d-flex align-items-center">
-                    <div class="p-3">
-                        <a class="btn user-edit-button " href="/users/{{user.id}}/edit">Edit</a>
-                    </div>
-                    <div class="p-3">
-                        <a class="btn user-delete-button" href="/users/{{user.id}}/delete">Delete</a>
-                    </div>
-                </div>
-                {{/if}}
-            </div>
-
-            <div class="col-7">
-                <p>Series que me gustan:</p>
+    <div class="main-content">
+        <div class="flex-content">
+            <div class="section">
                 <div class="row">
-                    {{#each user.series}}
+                    <div class="col">
+                        <h2 class="mb-5">Perfil de <span>{{user.username}}</span></h2>
+                        <img class="mb-3" style="width: 50%; height: 50%;" src="{{user.avatar}}">
+                        <p class="text-muted"><i>{{user.description}}</i></p>
+                        <div class="d-flex">
+                            <div class="points-div text-center">
+                                <span><strong>{{user.points}}</strong></span>
+                            </div>
+                            <span class="mt-2">&nbsp&nbsppts</span>
+                        </div>
+                        {{#if isAdmin}}
+                        <div class="d-flex align-items-center">
+                            <div class="p-3">
+                                <a class="btn user-edit-button " href="/users/{{user.id}}/edit">Edit</a>
+                            </div>
+                            <div class="p-3">
+                                <a class="btn user-delete-button" href="/users/{{user.id}}/delete">Delete</a>
+                            </div>
+                        </div>
+                        {{/if}}
 
-                    <div class="card bg-dark text-white col-5 m-2">
-                        <img src="{{this.image}}" class="card-img" style=" opacity:0.5;" alt="...">
-                        <div class="card-img-overlay">
-                            <h3 class="card-title">{{this.title}}</h3>
-                            <a class="btn text-light" href="/series/{{this._id}}">Ver más</a>
+                        {{#if canEdit}}
+                        <div class="d-flex align-items-center">
+                            <div class="p-3">
+                                <a class="btn user-edit-button " href="/users/{{user.id}}/edit">Edit</a>
+                            </div>
+                            <div class="p-3">
+                                <a class="btn user-delete-button" href="/users/{{user.id}}/delete">Delete</a>
+                            </div>
+                        </div>
+                        {{/if}}
+                    </div>
+
+                    <div class="col-7">
+                        <h3><strong>Series que me gustan</strong></h3>
+                        <div class="row">
+                            {{#each user.series}}
+
+                            <div class="card bg-dark text-white col-5 my-5 column">
+                                <img src="{{this.image}}" class="card-img" style=" opacity:0.5;" alt="...">
+                                <div class="card-img-overlay">
+                                    <h3 class="card-title">{{this.title}}</h3>
+                                    <a class="btn text-light" href="/series/{{this._id}}">Ver más</a>
+                                </div>
+                            </div>
+                            {{/each}}
                         </div>
                     </div>
-                    {{/each}}
                 </div>
             </div>
         </div>
     </div>
-
 </div>

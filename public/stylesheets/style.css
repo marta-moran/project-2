@@ -346,3 +346,14 @@ body {
   text-align: center;
   font-weight: 500;
 }
+
+.points-div {
+  padding: 10px;
+  background-color: var(--third-color);
+  border-radius: 50px;
+  width: 10%;
+}
+
+.row {
+  justify-content: space-around
+}
