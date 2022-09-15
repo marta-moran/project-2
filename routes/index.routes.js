@@ -2,12 +2,26 @@ const router = require("express").Router();
 const bcrypt = require('bcryptjs');
 const multerMiddleware = require('../middleware/multer.middleware');
 const User = require('../models/User.model')
+const SeriesModel = require("../models/Serie.model")
 const hasNumber = require('../utils/hasNumber')
 const saltRounds = 10
 
 /* GET home page */
 router.get("/", (req, res, next) => {
-  res.render("index");
+  SeriesModel.find()
+    .then((serieFollow) => {
+
+      serieFollow.sort(function (a, b) {
+        return b.users.length - a.users.length;
+      })
+      console.log(serieFollow)
+      const orderSeries = serieFollow.slice(0, 3);
+      console.log(orderSeries);
+      res.render("index");
+
+      // res.json(orderSeries);
+    })
+    .catch((err) => console.log(err))
 });
 
 // Sign up
