@@ -3,6 +3,7 @@ const User = require('../models/User.model')
 const { ADMIN, USER } = require('../const/index');
 const multerMiddleware = require('../middleware/multer.middleware');
 const SerieModel = require('../models/Serie.model')
+const userAdmin = require("../utils/isAdmin")
 
 router.get('/', (req, res, next) => {
     User.find()
@@ -20,7 +21,7 @@ router.get('/:id', (req, res, next) => {
         .populate('series')
         .then((user) => {
             console.log(user)
-            if (req.session.currentUser.role === ADMIN) {
+            if (userAdmin(req)) {
                 isAdmin = true
             } else if (req.session.currentUser._id.toString() === req.params.id.toString()) {
                 canEdit = true
@@ -38,7 +39,7 @@ router.get('/:id/edit', (req, res, next) => {
 
     console.log("GET username--->", req.app.locals.currentUsername)
 
-    if (req.session.currentUser.role === ADMIN || req.session.currentUser._id.toString() === req.params.id.toString()) {
+    if (userAdmin(req) || req.session.currentUser._id.toString() === req.params.id.toString()) {
         User.findById(req.params.id)
             .then((user) => {
                 res.render('users/edit-form', user)
@@ -56,23 +57,32 @@ router.get('/:id/follow', (req, res, next) => {
 
 router.get('/:id/delete', async (req, res, next) => {
     try {
-        if (req.session.currentUser._id.toString() === req.params.id.toString() || req.session.currentUser.role === ADMIN) {
-            const seriesUsers = await SerieModel.find().select('users')
+        // crear variable ID del params
+        const userId = req.params.id;
+        if (req.session.currentUser._id.toString() === userId.toString() || userAdmin(req)) {
+            // const seriesUsers = await SerieModel.find().select('users')
             console.log(seriesUsers)
 
-            for (let serieUsers of seriesUsers) {
-                console.log(serieUsers)
-                if (serieUsers.users.includes(req.params.id)) {
-                    const index = serieUsers.users.indexOf(req.params.id)
-                    const newUsers = serieUsers.users.splice(index, 1)
-                    const serie = await SerieModel.findByIdAndUpdate(serieUsers._id, { users: serieUsers.users })
-                    console.log(serie, { new: true })
-                }
+            await SerieModel.findOneAndUpdate({ users: { $in: [req.params.id] } }, { $pull: { users: req.params.id } })
+
+            // for (let serieUsers of seriesUsers) {
+            //     console.log(serieUsers)
+            //     if (serieUsers.users.includes(userId)) {
+            //         const index = serieUsers.users.indexOf(userId)
+            //         const newUsers = serieUsers.users.splice(index, 1)
+            //         const serie = await SerieModel.findByIdAndUpdate(serieUsers._id, { users: serieUsers.users })
+            //         console.log(serie, { new: true })
+            //     }
+            // }
+            const deletedUser = await User.findByIdAndDelete(userId)
+            // eliminar sesión 
+            if (req.session.currentUser.role != ADMIN) {
+                res.redirect('/logout')
+            } else {
+                res.redirect('/users')
             }
-            const deletedUser = await User.findByIdAndDelete(req.params.id)
-            res.redirect('/logout')
         } else {
-            console.log(req.session.currentUser._id.toString() !== req.params.id.toString())
+            console.log(req.session.currentUser._id.toString() !== userId.toString())
             console.log(req.session.currentUser.role !== ADMIN)
             console.log('No puedes hacer esto')
             res.redirect('/login')
@@ -96,14 +106,10 @@ router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
     console.log("Image-->", image)
     User.findByIdAndUpdate(req.params.id, { username, avatar: image, description }, { new: true })
         .then((userUpdate) => {
-            // console.log(userUpdate)
+
             req.session.currentUser = userUpdate
             req.app.locals.currentAvatar = req.session.currentUser.avatar
             req.app.locals.currentUsername = req.session.currentUser.username
-            // console.log(req.app.locals.currentUsername)
-
-            // console.log("redirecting...")
-
             res.redirect(`/users/${req.params.id}`)
         })
         .catch((err) => {
@@ -121,17 +127,15 @@ router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
 })
 
 router.post('/:id/points', (req, res, next) => {
-    console.log("Body--->", req.body.points)
-    const points = req.session.currentUser.points + req.body.points
 
-    User.findByIdAndUpdate(req.params.id, { points: points }, { new: true })
+    User.findByIdAndUpdate(req.params.id, { $inc: { points: req.body.points } }, { new: true })
         .then((updatedUser) => {
             req.session.currentUser = updatedUser
             res.sendStatus(200)
         })
 
         .catch((err) => console.log(err))
-    // req.app.locals.points = points
+
 })
 
 

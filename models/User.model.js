@@ -12,7 +12,7 @@ const userSchema = new Schema(
     role: { type: String, enum: ROLES, default: USER },
     series: [{ type: Schema.Types.ObjectId, ref: "series" }],
     points: { type: Number, default: 0 },
-    description: { type: String, default: "Soy muy creativo y no tengo bio" }
+    description: { type: String, default: "Dejalo como esta y luego lo pensamos" }
   },
   {
 
