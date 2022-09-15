@@ -91,6 +91,8 @@ router.get("/:id/translate", async (req, res, next) => {
 
         const enPhrase = phrase.quote
         req.app.locals.enPhrase = enPhrase
+        const character = phrase.role
+        const show = phrase.show
 
         console.log(phrase)
 
@@ -108,7 +110,7 @@ router.get("/:id/translate", async (req, res, next) => {
             return 0.5 - Math.random();
         }
 
-        res.render("series/serie-translate", { words: shuffledWords, phrase: enPhrase })
+        res.render("series/serie-translate", { words: shuffledWords, phrase: enPhrase, character, show })
     } catch (err) {
         next(err)
     }
