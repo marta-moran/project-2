@@ -83,6 +83,11 @@ async function getPhrase() {
       const res = await axios.post(`http://localhost:3000/users/${userId}/points`, { points })
       console.log("res--->", res)
       window.location.href = `http://localhost:3000/series/${id}/translate`
+    } else {
+      // document.body.innerHTML += `<div id="errorMessage">
+      //   <p>'Intentalo de nuevo'</p>
+      // </div>`
+
     }
 
   } catch (err) {

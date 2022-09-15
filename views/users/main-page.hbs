@@ -29,12 +29,15 @@
             </section>
             <section class="ranking">
                 <h3>Ranking</h3>
-                <p>1.hola hola hola</p>
-                <hr>
-                <p>2. ee22222222</p>
-                <hr>
-                <p>3. adiosssssssss</p>
+                <ol>
+                    {{#each bestUsers}}
+                    <li><a href="/users/{{id}}" class="text-decoration-none">{{username}}</a></li>
+                    <hr>
+                    {{/each}}
+                </ol>
+
             </section>
+
         </div>
 
     </div>
