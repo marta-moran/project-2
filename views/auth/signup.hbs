@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h1>Registro</h1>
                 <hr>
-                <form action="/signup" method="POST" enctype="multipart/form-data">
+                <form action="/signup" method="POST" enctype="multipart/form-data" id="signupform">
                     <div class="mb-3">
                         <label for="usernameInput" class="form-label">Nombre de usuario</label>
                         <input type="text" class="form-control" id="usernameInput" name="username" required>
@@ -19,14 +19,22 @@
 
 
                     <div class="mb-3">
-                        <label>Image:
+                        <label class="form-label">Image:
                             <input type="file" name="avatar" class="form-control-file" class="input-file" />
                         </label>
                     </div>
 
-                    <div class="d-grid gap-2 m-2">
-                        <button type="submit" class="btn btn-dark block">Completar registro</button>
+                    <div class="mb-3">
+                        <label class="form-label">Descripcion:</label>
+                        <textarea class="form-control" name="description" form="signupform"
+                            placeholder="Enter text here..." rows="3"></textarea>
                     </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-dark block">Acceder</button>
+                    </div>
+
+
+
 
                     {{#if errorMessage}}
                     <div id="errorMessage">

@@ -180,7 +180,7 @@ router.get("/:id", (req, res, next) => {
     SeriesModel.findById(req.params.id)
         .populate('users')
         .then((serie) => {
-            // console.log(serie);
+            console.log(serie);
             if (req.session.currentUser.role === ADMIN) {
                 isAdmin = true
             }
@@ -194,7 +194,7 @@ router.get("/:id", (req, res, next) => {
 // Crear y editar POST
 
 router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
-    const { title } = req.body;
+    const { title, description } = req.body;
     const slugTrans = slugger(title);
     let image = undefined
 
@@ -202,7 +202,7 @@ router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
         image = req.file.path;
     }
 
-    SeriesModel.create({ title, slug: slugTrans, image: image })
+    SeriesModel.create({ title, slug: slugTrans, image: image, description })
         .then(() => {
             res.redirect("/series");
         })
@@ -211,7 +211,8 @@ router.post("/create", multerMiddleware.single('image'), (req, res, next) => {
 
 
 router.post("/:id/edit", multerMiddleware.single('image'), (req, res, next) => {
-    const { title, existingImage } = req.body
+    const { title, existingImage, description } = req.body
+    console.log(description)
     let image = ''
 
     if (req.file && req.file.path) {
@@ -220,7 +221,7 @@ router.post("/:id/edit", multerMiddleware.single('image'), (req, res, next) => {
         image = existingImage;
     }
 
-    SeriesModel.findByIdAndUpdate(req.params.id, { title, image: image }, { new: true })
+    SeriesModel.findByIdAndUpdate(req.params.id, { title, image: image, description }, { new: true })
         .then((serieUpdate) => {
             res.redirect("/series")
         })

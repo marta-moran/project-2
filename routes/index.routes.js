@@ -25,7 +25,9 @@ router.get('/logout', (req, res, next) => {
 
 
 router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
-  const { username, userPwd } = req.body;
+  const { username, userPwd, description } = req.body;
+  console.log(req.body)
+
   let image = undefined;
   if (req.file && req.file.path) {
     image = req.file.path
@@ -35,7 +37,7 @@ router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
     bcrypt
       .genSalt(saltRounds)
       .then(salt => bcrypt.hash(userPwd, salt))
-      .then(hashedPassword => User.create({ username, password: hashedPassword, avatar: image }))
+      .then(hashedPassword => User.create({ username, password: hashedPassword, avatar: image, description }))
       .then(createdUser => res.redirect('/login'))
       .catch(error => {
         console.log(error)

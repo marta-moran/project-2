@@ -11,7 +11,8 @@ const userSchema = new Schema(
     friends: [{ type: Schema.Types.ObjectId, ref: 'users' }],
     role: { type: String, enum: ROLES, default: USER },
     series: [{ type: Schema.Types.ObjectId, ref: "series" }],
-    points: { type: Number, default: 0 }
+    points: { type: Number, default: 0 },
+    description: { type: String, default: "Soy muy creativo y no tengo bio" }
   },
   {
 
