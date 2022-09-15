@@ -30,7 +30,7 @@ router.get("/signup", (req, res, next) => {
 })
 
 router.get("/login", (req, res, next) => {
-  res.render("auth/login")
+  res.render("auth/login") //rebderizar a una página distinta concreta para el user
 })
 
 router.get('/logout', (req, res, next) => {
@@ -82,7 +82,7 @@ router.post('/login', (req, res, next) => {
         return
       } else {
         req.session.currentUser = user
-        res.redirect('/')
+        res.redirect('/users/main-page')
       }
     })
     .catch(error => next(error))

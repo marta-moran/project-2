@@ -43,6 +43,7 @@ router.get("/", (req, res, next) => {
 })
 
 
+
 router.get("/create", roleValidation(ADMIN), (req, res, next) => {
     axiosSerie
         .getShows()
@@ -94,6 +95,7 @@ router.get("/:id/translate", async (req, res, next) => {
             return 0.5 - Math.random();
         }
         const shuffledWords = [...words].sort(compare);
+
         res.render("series/serie-translate", { words: shuffledWords, phrase: enPhrase, character, show })
     } catch (err) {
         next(err)
@@ -149,40 +151,6 @@ router.get('/:id/dislike', (req, res, next) => {
         .catch((err) => next(err));
 
 })
-
-
-
-// SeriesModel.findById(req.params.id)
-//     .then((serie) => {
-//         const index = serie.users.indexOf(req.session.currentUser._id.toString())
-
-
-//         if (index !== -1) {
-//             const newusers = serie.users.splice(index, 1)
-//         }
-//         return SeriesModel.findByIdAndUpdate(req.params.id, serie, { new: true })
-//     })
-// .then((updatedSerie) => {
-//     // solo una llamada a la BD
-//     console.log(updatedSerie)
-//     const indexUser = req.session.currentUser.series.indexOf(req.params.id.toString())
-//     if (indexUser !== -1) {
-//         console.log(req.session.currentUser)
-//         req.session.currentUser.series.splice(indexUser, 1)
-//         console.log(req.session.currentUser)
-//     }
-
-//     return User.findByIdAndUpdate(req.session.currentUser._id, req.session.currentUser, { new: true })
-
-// })
-// .then((updatedUser) => {
-//     console.log(updatedUser)
-//     req.session.currentUser = updatedUser
-//     res.redirect('/series')
-// })
-
-// .catch(err => next(err))
-// })
 
 router.get("/:id", (req, res, next) => {
 

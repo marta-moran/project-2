@@ -1,0 +1,41 @@
+<div class="main-content">
+    <div class="container">
+        <section class="section">
+            <h2>Hola <span>{{user.username}}</span></h1>
+        </section>
+        <div class="personal-page">
+            <section class="carousel">
+                <h3 class="h4 text-center">Series más vistas</h3>
+                <div id="carouselExampleControls" class="carousel slide " data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {{#each series}}
+                        <div class="carousel-item {{#if bol}}active{{/if}}">
+                            <img src="{{image}}" class="d-block w-100" alt="">
+                            <h3 class="text-center mt-2">{{title}}</h3>
+                        </div>
+                        {{/each}}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </section>
+            <section class="ranking">
+                <h3>Ranking</h3>
+                <p>1.hola hola hola</p>
+                <hr>
+                <p>2. ee22222222</p>
+                <hr>
+                <p>3. adiosssssssss</p>
+            </section>
+        </div>
+
+    </div>
+</div>
