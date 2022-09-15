@@ -83,6 +83,13 @@ async function getPhrase() {
       const res = await axios.post(`http://localhost:3000/users/${userId}/points`, { points })
       console.log("res--->", res)
       window.location.href = `http://localhost:3000/series/${id}/translate`
+    } else {
+      const divErr = document.createElement('div')
+      const p = document.createElement('p')
+      p.textContent = 'has fallaoooo'
+      p.setAttribute('id', 'errorMessage')
+      divErr.appendChild(p)
+      document.body.appendChild(divErr)
     }
 
   } catch (err) {
@@ -93,7 +100,6 @@ async function getPhrase() {
 
 
 function checkPhrase(phrase, ogPhrase) {
-
   const phrase1 = phrase.join(" ");
   const phrase2 = ogPhrase.join(" ");
   console.log(phrase1, phrase2);

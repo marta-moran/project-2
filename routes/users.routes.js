@@ -24,7 +24,10 @@ router.get('/main-page', (req, res, next) => {
             console.log(serieFollow)
             const orderSeries = serieFollow.slice(0, 3);
             // res.json(orderSeries);
-            orderSeries[0].bol = true
+            if (orderSeries.length !== 0) {
+                orderSeries[0].bol = true
+            }
+
             res.render('users/main-page', { user, orderSeries })
         })
 })

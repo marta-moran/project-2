@@ -344,7 +344,9 @@ body {
   border: 0;
   border-radius: 50%;
   text-align: center;
-  font-weight: 500;
+  border: 5px solid var(--third-color);
+  font-weight: 600;
+  color: var(--primary-color);
 }
 
 .points-div {
@@ -356,4 +358,27 @@ body {
 
 .row {
   justify-content: space-around
+}
+
+.req {
+  color: red;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.button-other-color {
+  background-color: var(--primary-color);
+}
+
+.control-btns a:nth-child(5) {
+  margin-left: 300px
+}
+
+.description {
+  width: 70%;
+  background-color: #6bbd9935;
+  padding: 20px;
+  border-radius: 20px;
 }
