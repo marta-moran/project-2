@@ -48,8 +48,7 @@ function getLastParagraphs() {
 
   ps[ps.length - 1].addEventListener('click', () => {
     const btn = document.createElement('button')
-    btn.setAttribute('class', 'word')
-    btn.setAttribute('class', 'btn-frase')
+    btn.setAttribute('class', 'word btn-frase')
     btn.textContent = ps[ps.length - 1].textContent
     divBtn.appendChild(btn)
     ps[ps.length - 1].remove()
