@@ -44,19 +44,23 @@ router.get("/", (req, res, next) => {
 
 
 
-router.get("/create", roleValidation(ADMIN), (req, res, next) => {
-    axiosSerie
-        .getShows()
-        .then((series) => {
+router.get("/create", roleValidation(ADMIN), async (req, res, next) => {
+    try {
+        const series = await axiosSerie.getShows()
+        if (!req.query.error) {
             res.render("series/serie-create", { series });
-        })
-        .catch((err) => {
-            if (err.code === 11000) {
-                res.render("series/serie-create", { errorMessage: 'La serie ya existe' })
-            } else {
-                next(err)
-            }
-        })
+
+        } else {
+            res.render("series/serie-create", { series, errorMessage: req.query.error })
+        }
+    } catch (err) {
+        if (err.code === 11000) {
+            res.render("series/serie-create", { errorMessage: 'La serie ya existe' })
+        } else {
+            next(err)
+        }
+    }
+
 })
 
 router.get('/getphrase', (req, res, next) => {
@@ -67,16 +71,20 @@ router.get('/getphrase', (req, res, next) => {
     res.json({ words, phrase, id, userId })
 })
 
-router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
+router.get("/:id/edit", roleValidation(ADMIN), async (req, res, next) => {
+    try {
 
-    SeriesModel.findById(req.params.id)
-
-        .then((serie) => {
+        const serie = await SeriesModel.findById(req.params.id)
+        if (!req.query.error) {
             res.render("series/serie-update", serie);
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+        } else {
+            serie.errorMessage = req.query.error
+            res.render("series/serie-update", serie);
+
+        }
+    } catch (err) {
+        next(err)
+    }
 })
 
 
@@ -182,6 +190,7 @@ router.get("/:id", (req, res, next) => {
 
 
 router.post("/create", multerMiddleware.single('image'), roleValidation(ADMIN), (req, res, next) => {
+    console.log("POSTEATE ESTE ")
     let { title, description } = req.body;
     const slugTrans = slugger(title);
     let image = undefined
@@ -197,7 +206,10 @@ router.post("/create", multerMiddleware.single('image'), roleValidation(ADMIN), 
         .then(() => {
             res.redirect("/series");
         })
-        .catch((err) => next(err));
+        .catch((err) => {
+            next(err)
+        });
+
 })
 
 

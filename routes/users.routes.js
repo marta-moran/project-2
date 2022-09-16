@@ -61,18 +61,24 @@ router.get('/:id', (req, res, next) => {
 })
 
 
-router.get('/:id/edit', (req, res, next) => {
-
-    console.log("GET username--->", req.app.locals.currentUsername)
-
-    if (userAdmin(req) || req.session.currentUser._id.toString() === req.params.id.toString()) {
-        User.findById(req.params.id)
-            .then((user) => {
+router.get('/:id/edit', async (req, res, next) => {
+    try {
+        console.log(req.query.error)
+        console.log("GET username--->", req.app.locals.currentUsername)
+        const user = await User.findById(req.params.id)
+        console.log(user.username)
+        if (!req.query.error) {
+            if (userAdmin(req) || req.session.currentUser._id.toString() === req.params.id.toString()) {
                 res.render('users/edit-form', user)
-            })
-
-    } else {
-        res.redirect('/login')
+            } else {
+                res.redirect('/login')
+            }
+        } else {
+            user.errorMessage = req.query.error
+            res.render('users/edit-form', user)
+        }
+    } catch (err) {
+        next(err)
     }
 
 })
@@ -87,7 +93,7 @@ router.get('/:id/delete', async (req, res, next) => {
         const userId = req.params.id;
         if (req.session.currentUser._id.toString() === userId.toString() || userAdmin(req)) {
             // const seriesUsers = await SerieModel.find().select('users')
-            console.log(seriesUsers)
+            // console.log(seriesUsers)
 
             await SerieModel.findOneAndUpdate({ users: { $in: [req.params.id] } }, { $pull: { users: req.params.id } })
 
@@ -102,7 +108,7 @@ router.get('/:id/delete', async (req, res, next) => {
             // }
             const deletedUser = await User.findByIdAndDelete(userId)
             // eliminar sesión 
-            if (req.session.currentUser.role != ADMIN) {
+            if (req.session.currentUser.role !== ADMIN) {
                 res.redirect('/logout')
             } else {
                 res.redirect('/users')
@@ -132,20 +138,17 @@ router.post('/:id/edit', multerMiddleware.single('image'), (req, res, next) => {
     console.log("Image-->", image)
     User.findByIdAndUpdate(req.params.id, { username, avatar: image, description }, { new: true })
         .then((userUpdate) => {
-
-            req.session.currentUser = userUpdate
-            req.app.locals.currentAvatar = req.session.currentUser.avatar
-            req.app.locals.currentUsername = req.session.currentUser.username
+            if (req.session.currentUser._id.toString() === req.params.id.toString()) {
+                req.session.currentUser = userUpdate
+                req.app.locals.currentAvatar = req.session.currentUser.avatar
+                req.app.locals.currentUsername = req.session.currentUser.username
+            }
             res.redirect(`/users/${req.params.id}`)
         })
         .catch((err) => {
             console.log("Message--->", err.message)
             if (err.code === 11000) {
                 res.render('users/edit-form', { errorMessage: 'Username already in use' })
-
-            } else if (err.message === 'Image file format webp not allowed') {
-                res.render('users/edit-form', { errorMessage: 'Image format invalid' })
-
             } else {
                 next(err);
             }

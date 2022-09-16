@@ -41,39 +41,45 @@ router.get('/logout', (req, res, next) => {
 
 
 router.post('/signup', multerMiddleware.single('avatar'), (req, res, next) => {
-  let { username, userPwd, description } = req.body;
-  if (description === "") {
-    description = undefined
-  }
-  console.log(req.body.description)
+  if (!req.query.error) {
+    let { username, userPwd, description } = req.body;
+    if (description === "") {
+      description = undefined
+    }
+    console.log(req.body.description)
 
-  let image = undefined;
-  if (req.file && req.file.path) {
-    image = req.file.path
-  }
+    let image = undefined;
+    if (req.file && req.file.path) {
+      image = req.file.path
+    }
 
-  if (userPwd.length > 5 && hasNumber(userPwd)) {
-    bcrypt
-      .genSalt(saltRounds)
-      .then(salt => bcrypt.hash(userPwd, salt))
-      .then(hashedPassword => User.create({ username, password: hashedPassword, avatar: image, description }))
-      .then((createdUser) => {
-        console.log(createdUser)
-        req.session.currentUser = createdUser
-        res.redirect(`/users/${createdUser._id}`)
-      })
-      .catch(error => {
-        console.log(error)
-        if (error.code === 11000) {
-          // console.log('User validation failed')
-          res.render('auth/signup', { errorMessage: 'El usuario ya existe' })
-        } else {
-          next(error)
-        }
-      })
+    if (userPwd.length > 5 && hasNumber(userPwd)) {
+      bcrypt
+        .genSalt(saltRounds)
+        .then(salt => bcrypt.hash(userPwd, salt))
+        .then(hashedPassword => User.create({ username, password: hashedPassword, avatar: image, description }))
+        .then((createdUser) => {
+          console.log(createdUser)
+          req.session.currentUser = createdUser
+          res.redirect(`/users/${createdUser._id}`)
+        })
+        .catch(error => {
+          console.log(error)
+          if (error.code === 11000) {
+            // console.log('User validation failed')
+            res.render('auth/signup', { errorMessage: 'El usuario ya existe' })
+          } else {
+            next(error)
+          }
+        })
+    } else {
+      res.render('auth/signup', { errorMessage: 'La contraseña debe tener minimo 6 caracteres y contener un numero ' })
+    }
   } else {
-    res.render('auth/signup', { errorMessage: 'La contraseña debe tener minimo 6 caracteres y contener un numero ' })
+    console.log(req.query.error)
+    res.render('auth/signup', { errorMessage: req.query.error })
   }
+
 });
 
 router.post('/login', (req, res, next) => {
