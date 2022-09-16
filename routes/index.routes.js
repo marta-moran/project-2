@@ -8,22 +8,7 @@ const saltRounds = 10
 
 /* GET home page */
 router.get("/", (req, res, next) => {
-
   res.render("index")
-  // SeriesModel.find()
-  //   .then((serieFollow) => {
-
-  //     serieFollow.sort(function (a, b) {
-  //       return b.users.length - a.users.length;
-  //     })
-  //     console.log(serieFollow)
-  //     const orderSeries = serieFollow.slice(0, 3);
-  //     // res.json(orderSeries);
-  //     res.render("index", { orderSeries });
-
-  //     // res.json(orderSeries);
-  //   })
-  //   .catch((err) => console.log(err))
 });
 
 // Sign up
@@ -32,7 +17,7 @@ router.get("/signup", (req, res, next) => {
 })
 
 router.get("/login", (req, res, next) => {
-  res.render("auth/login") //rebderizar a una página distinta concreta para el user
+  res.render("auth/login")
 })
 
 router.get('/logout', (req, res, next) => {
@@ -93,7 +78,7 @@ router.post('/login', (req, res, next) => {
         res.render('auth/login', { errorMessage: 'Usuario no registrado' })
         return
       } else if (bcrypt.compareSync(userPwd, user.password) === false) {
-        res.render('auth/login', { errorMessage: 'La contraseña es incorrecta' })
+        res.render('auth/login', { errorMessage: 'Usuario o contraseña incorrecta' })
         return
       } else {
         req.session.currentUser = user
