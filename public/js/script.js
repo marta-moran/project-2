@@ -65,7 +65,7 @@ async function getPhrase() {
       phrase.push(p.textContent)
     }
 
-    const res = await axios.get(`${process.env.HEROKU_URL}series/getphrase`)
+    const res = await axios.get(`https://phrasier.herokuapp.com/series/getphrase`)
 
     const { phrase: enPhrase, words: esPhrase, id, userId } = res.data;
 
@@ -73,9 +73,9 @@ async function getPhrase() {
 
     if (checkPhrase(phrase, esPhrase)) {
       const points = phrase.length
-      const res = await axios.post(`${process.env.HEROKU_URL}users/${userId}/points`, { points })
+      const res = await axios.post(`https://phrasier.herokuapp.com/users/${userId}/points`, { points })
       console.log("res--->", res)
-      window.location.href = `${process.env.HEROKU_URL}series/${id}/translate`
+      window.location.href = `https://phrasier.herokuapp.com/series/${id}/translate`
     } else {
       const divErr = document.createElement('div')
       const p = document.createElement('p')

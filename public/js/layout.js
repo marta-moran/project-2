@@ -12,7 +12,7 @@ document.addEventListener(
 
 function setLang(lang) {
     language = lang.target.value
-    axios.post(`${process.env.HEROKU_URL}setlanguage`, { language })
+    axios.post(`https://phrasier.herokuapp.com/setlanguage`, { language })
         .then((res) => {
             location.reload()
             console.log(res.data)
