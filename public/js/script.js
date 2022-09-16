@@ -57,7 +57,6 @@ function getLastParagraphs() {
   })
 }
 
-
 async function getPhrase() {
   try {
     let ps = document.querySelectorAll('#phrase span')
@@ -68,13 +67,7 @@ async function getPhrase() {
 
     const res = await axios.get('http://localhost:3000/series/getphrase')
 
-    console.log(res.data.phrase)
-    // destructurar
     const { phrase: enPhrase, words: esPhrase, id, userId } = res.data;
-    // const enPhrase = res.data.phrase
-    // const esPhrase = res.data.words
-    // const id = res.data.id
-    // const userId = res.data.userId
 
     console.log(checkPhrase(phrase, esPhrase))
 
@@ -97,7 +90,6 @@ async function getPhrase() {
   }
 
 }
-
 
 function checkPhrase(phrase, ogPhrase) {
   const phrase1 = phrase.join(" ");
