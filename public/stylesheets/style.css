@@ -63,7 +63,7 @@ body {
   font-size: 25px;
   font-weight: 400;
   margin-top: 30px;
-  width: 75%;
+  width: 70%;
 }
 
 .main-content {
@@ -336,9 +336,14 @@ body {
 }
 
 .carousel {
-  width: 70%;
-  height: 50%
+  width: 48%;
+  margin-left: 80px;
 }
+
+.personal-page {
+  height: 520px;
+}
+
 
 #language {
   border: 0;
@@ -381,16 +386,17 @@ body {
   background-color: #c4e8c264;
   font-size: 30px;
   border-radius: 20px;
+  margin-right: 120px;
 }
 
 .ranking li {
   margin-top: 50px;
   list-style: decimal;
   text-decoration: none;
+}
 
-  /* .req {
-    color: red;
-  } */
+.req {
+  color: red;
 }
 
 .card:hover {
@@ -406,8 +412,22 @@ body {
 }
 
 .description {
-  width: 70%;
+  width: 100%;
   background-color: #6bbd9935;
   padding: 20px;
   border-radius: 20px;
+}
+
+.left-content img {
+  margin-left: 200px;
+}
+
+.desc {
+  margin-left: 180px;
+}
+
+
+/* imágenes */
+.img-series-watch {
+  width: 60%;
 }
