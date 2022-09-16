@@ -12,7 +12,7 @@ document.addEventListener(
 
 function setLang(lang) {
     language = lang.target.value
-    axios.post('http://localhost:3000/setlanguage', { language })
+    axios.post(`${process.env.HEROKU_URL}setlanguage`, { language })
         .then((res) => {
             location.reload()
             console.log(res.data)
