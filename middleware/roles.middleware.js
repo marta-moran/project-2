@@ -6,5 +6,4 @@ const roleValidation = (...roles) => (req, res, next) => {
     }
 }
 
-
 module.exports = roleValidation

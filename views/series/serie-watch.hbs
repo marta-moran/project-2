@@ -1,53 +1,44 @@
 <div class="main-content">
     <div class="container">
         <h1>Watching: <span class="serieTitle">{{serie.title}}</span></h1>
-
         <div class="row">
-            <div class="col">
-                <img class="mt-4" style="width: 80%; height: 60%" src="{{serie.image}}" alt="serie">
-                <p class="mt-3 description">{{serie.description}}</p>
+            <div class="col left-content">
+                <img class="mt-4 img-series-watch" src="{{serie.image}}" alt="serie">
+                <div class="desc ">
+                    <p class="mt-3 description">{{serie.description}}</p>
 
-                {{#if isAdmin}}
-                <div class="d-flex flex-row">
-                    <div class="p-3 ">
-                        <a class="button-small text-decoration-none text-light"
-                            href="/series/{{serie.id}}/edit">Edit</a>
+                    {{#if isAdmin}}
+                    <div class="d-flex flex-row">
+                        <div class="p-3 ">
+                            <a class="button-small text-decoration-none text-light"
+                                href="/series/{{serie.id}}/edit">Edit</a>
+                        </div>
+
+                        <div class="p-3 ">
+                            <a class="button-small-delete text-decoration-none text-light"
+                                href="/series/{{serie._id}}/delete">Delete</a>
+                        </div>
+                        {{/if}}
                     </div>
 
-                    <div class="p-3 ">
-                        <a class="button-small-delete text-decoration-none text-light"
-                            href="/series/{{_id}}/delete">Delete</a>
+                </div>
+                <div class="col-5 right-content">
+                    <ul class="list-group">
+                        {{#each serie.users}}
+                        <li class="my-2">
+                            <img src="{{this.avatar}}" class="small-avatar">
+                            <a href="/users/{{_id}}" class="text-decoration-none">{{this.username}}</a>
+                        </li>
+                        {{/each}}
+                    </ul>
+
+                    <div id="buttons">
+                        <div class="p-3">
+                            <a class="button-small text-decoration-none text-light"
+                                href="/series/{{serie.id}}/translate">Jugar</a>
+                        </div>
                     </div>
                 </div>
-                {{/if}}
             </div>
-            <div class="col-4">
-                {{!-- d-flex flex-column justify-content-between --}}
-                <ul class="list-group">
-                    {{#each serie.users}}
-                    <li class="my-2">
-                        <img src="{{this.avatar}}" class="small-avatar">
-                        <a href="/users/{{_id}}" class="text-decoration-none">{{this.username}}</a>
-                    </li>
-                    {{/each}}
-                </ul>
-
-                <div id="buttons">
-                    <div class="p-3">
-                        <a class="button-small text-decoration-none text-light"
-                            href="/series/{{serie.id}}/translate">Jugar</a>
-                    </div>
-                </div>
-
-                {{!-- <div class="p-3">
-                    <a class="btn user-edit-button " href="/series/{{serie.id}}/translate">Jugar</a>
-                </div> --}}
-
-
-            </div>
-
         </div>
-
     </div>
-</div>
-</div>

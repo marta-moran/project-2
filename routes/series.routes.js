@@ -11,8 +11,6 @@ const deepl = require("deepl-node")
 const userAdmin = require("../utils/isAdmin")
 const translator = new deepl.Translator(process.env.API_KEY);
 
-
-
 router.get("/", (req, res, next) => {
     let isAdmin = false
 
@@ -22,7 +20,6 @@ router.get("/", (req, res, next) => {
                 isAdmin = true
             }
             const userfav = req.session.currentUser.series
-            console.log(userfav);
 
             const favSeries = series.map((serie) => {
                 if (userfav.includes(serie._id.toString())) {
@@ -30,8 +27,6 @@ router.get("/", (req, res, next) => {
                 } else {
                     serie.fav = false
                 }
-                console.log(serie.fav)
-                console.log(serie.title)
                 return serie;
             })
             res.render("series/series-list", { favSeries, isAdmin })
@@ -44,19 +39,23 @@ router.get("/", (req, res, next) => {
 
 
 
-router.get("/create", roleValidation(ADMIN), (req, res, next) => {
-    axiosSerie
-        .getShows()
-        .then((series) => {
+router.get("/create", roleValidation(ADMIN), async (req, res, next) => {
+    try {
+        const series = await axiosSerie.getShows()
+        if (!req.query.error) {
             res.render("series/serie-create", { series });
-        })
-        .catch((err) => {
-            if (err.code === 11000) {
-                res.render("series/serie-create", { errorMessage: 'La serie ya existe' })
-            } else {
-                next(err)
-            }
-        })
+
+        } else {
+            res.render("series/serie-create", { series, errorMessage: req.query.error })
+        }
+    } catch (err) {
+        if (err.code === 11000) {
+            res.render("series/serie-create", { errorMessage: 'La serie ya existe' })
+        } else {
+            next(err)
+        }
+    }
+
 })
 
 router.get('/getphrase', (req, res, next) => {
@@ -67,16 +66,20 @@ router.get('/getphrase', (req, res, next) => {
     res.json({ words, phrase, id, userId })
 })
 
-router.get("/:id/edit", roleValidation(ADMIN), (req, res, next) => {
+router.get("/:id/edit", roleValidation(ADMIN), async (req, res, next) => {
+    try {
 
-    SeriesModel.findById(req.params.id)
-
-        .then((serie) => {
+        const serie = await SeriesModel.findById(req.params.id)
+        if (!req.query.error) {
             res.render("series/serie-update", serie);
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+        } else {
+            serie.errorMessage = req.query.error
+            res.render("series/serie-update", serie);
+
+        }
+    } catch (err) {
+        next(err)
+    }
 })
 
 
@@ -90,8 +93,6 @@ router.get("/:id/translate", async (req, res, next) => {
         req.app.locals.enPhrase = enPhrase
         const character = phrase.role
         const show = phrase.show
-
-        console.log(phrase)
 
         const result = await translator.translateText(enPhrase, null, req.session.currentUser.language);
         const words = result.text.split(" ")
@@ -112,11 +113,8 @@ router.get("/:id/translate", async (req, res, next) => {
 
 router.get("/:id/delete", roleValidation(ADMIN), (req, res, next) => {
 
-    //await SerieModel.findOneAndUpdate({ users: { $in: [req.params.id] } }, { $pull: { users: req.params.id } })
-    //const deletedUser = await User.findByIdAndDelete(userId)
     User.findOneAndUpdate({ series: { $in: [req.params.id] } }, {
         $pull: { series: req.params.id }
-
     })
         .then(() => {
             return SeriesModel.findByIdAndDelete(req.params.id);
@@ -157,13 +155,11 @@ router.get('/:id/dislike', (req, res, next) => {
             res.redirect("/series")
         })
         .catch((err) => next(err));
-
 })
 
 router.get("/:id", (req, res, next) => {
-
     let isAdmin = false
-    console.log(req.session.currentUser.role)
+
     SeriesModel.findById(req.params.id)
         .populate('users')
         .then((serie) => {
@@ -171,20 +167,18 @@ router.get("/:id", (req, res, next) => {
             if (userAdmin(req)) {
                 isAdmin = true
             }
-            console.log("SERIES-->", serie)
-
             res.render("series/serie-watch", { serie, isAdmin })
         })
-        .catch((err) => console.log(err));
+        .catch((err) => next(err));
 })
 
 
-
-
 router.post("/create", multerMiddleware.single('image'), roleValidation(ADMIN), (req, res, next) => {
+    console.log("POSTEATE ESTE ")
     let { title, description } = req.body;
     const slugTrans = slugger(title);
     let image = undefined
+
     if (description === "") {
         description = undefined
     }
@@ -197,10 +191,11 @@ router.post("/create", multerMiddleware.single('image'), roleValidation(ADMIN), 
         .then(() => {
             res.redirect("/series");
         })
-        .catch((err) => next(err));
+        .catch((err) => {
+            next(err)
+        });
+
 })
-
-
 
 router.post("/:id/edit", multerMiddleware.single('image'), roleValidation(ADMIN), (req, res, next) => {
     const { title, existingImage, description } = req.body
@@ -219,7 +214,6 @@ router.post("/:id/edit", multerMiddleware.single('image'), roleValidation(ADMIN)
         })
         .catch((err) => next(err));
 })
-
 
 
 module.exports = router;

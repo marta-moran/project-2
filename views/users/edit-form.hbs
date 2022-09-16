@@ -3,11 +3,11 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2>Editar a {{username}}</h2>
-                <form action="/users/{{id}}/edit" method="POST" enctype="multipart/form-data" id="editform">
+                <form action="/users/{{_id}}/edit" method="POST" enctype="multipart/form-data" id="editform">
 
                     <div class="mb-3">
                         <label class="form-label">Nuevo nombre</label>
-                        <input type="text" name="username" placeholder="{{username}}" value="{{username}}">
+                        <input type="text" name="username" value="{{username}}">
                     </div>
 
                     <div class="mb-3">
