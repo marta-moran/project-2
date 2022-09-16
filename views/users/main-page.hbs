@@ -10,7 +10,7 @@
                     <div class="carousel-inner">
                         {{#each orderSeries}}
                         <div class="carousel-item {{#if bol}}active{{/if}}">
-                            <img src="{{image}}" class="d-block w-100" alt="">
+                            <img src="{{image}}" class="d-block h-75 w-100" alt="">
                             <h3 class="text-center mt-2">{{title}}</h3>
                         </div>
                         {{/each}}
@@ -29,12 +29,15 @@
             </section>
             <section class="ranking">
                 <h3>Ranking</h3>
-                <p>1.hola hola hola</p>
-                <hr>
-                <p>2. ee22222222</p>
-                <hr>
-                <p>3. adiosssssssss</p>
+                <ol>
+                    {{#each bestUsers}}
+                    <li><a href="/users/{{id}}" class="text-decoration-none">{{username}} - {{points}} pts.</a></li>
+                    <hr>
+                    {{/each}}
+                </ol>
+
             </section>
+
         </div>
 
     </div>

@@ -87,6 +87,15 @@ body {
   font-weight: 600;
 }
 
+.button-small-delete {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #e78585;
+  font-size: 20px;
+  border: 0;
+  font-weight: 600;
+}
+
 .btn-dark {
   padding: 10px 20px;
   border-radius: 20px;
@@ -112,7 +121,9 @@ body {
 }
 
 .profile-img {
-  width: 20%;
+  width: 50px;
+  height: 50px;
+
 }
 
 .section {
@@ -325,19 +336,8 @@ body {
 }
 
 .carousel {
-  width: 50%;
-
-}
-
-.ranking {
-  padding: 30px;
-  background-color: #c4e8c264;
-  font-size: 30px;
-  border-radius: 20px;
-}
-
-.ranking p {
-  margin-top: 50px;
+  width: 70%;
+  height: 50%
 }
 
 #language {
@@ -360,8 +360,37 @@ body {
   justify-content: space-around
 }
 
-.req {
-  color: red;
+.small-avatar {
+  width: 10%;
+  height: 10%;
+  border-radius: 50%;
+}
+
+.main-content li {
+  list-style-type: none;
+  font-size: 25px;
+}
+
+#serie-img {
+  width: 90%;
+  height: 50%
+}
+
+.ranking {
+  padding: 30px;
+  background-color: #c4e8c264;
+  font-size: 30px;
+  border-radius: 20px;
+}
+
+.ranking li {
+  margin-top: 50px;
+  list-style: decimal;
+  text-decoration: none;
+
+  /* .req {
+    color: red;
+  } */
 }
 
 .card:hover {

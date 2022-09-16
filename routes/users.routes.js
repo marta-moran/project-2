@@ -13,23 +13,27 @@ router.get('/', (req, res, next) => {
         .catch(error => next(error))
 })
 
-router.get('/main-page', (req, res, next) => {
-    const user = req.session.currentUser
-    SerieModel.find()
-        .then((serieFollow) => {
-
-            serieFollow.sort(function (a, b) {
-                return b.users.length - a.users.length;
-            })
-            console.log(serieFollow)
-            const orderSeries = serieFollow.slice(0, 3);
-            if (orderSeries.length !== 0) {
-                orderSeries[0].bol = true
-            }
-
-            res.render('users/main-page', { user, orderSeries })
+router.get('/main-page', async (req, res, next) => {
+    try {
+        const user = req.session.currentUser
+        const serieFollow = await SerieModel.find()
+        serieFollow.sort(function (a, b) {
+            return b.users.length - a.users.length;
         })
-        .catch(error => next(error))
+        console.log(serieFollow)
+        const orderSeries = serieFollow.slice(0, 3);
+
+        if (orderSeries.length !== 0) {
+            orderSeries[0].bol = true
+        }
+
+        const bestUsers = await User.find().sort({ 'points': -1 }).limit(3)
+        console.log(bestUsers)
+
+        res.render('users/main-page', { user, orderSeries, bestUsers })
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.get('/:id', (req, res, next) => {
