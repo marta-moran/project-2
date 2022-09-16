@@ -13,8 +13,12 @@ document.addEventListener(
 function setLang(lang) {
     language = lang.target.value
     axios.post('http://localhost:3000/setlanguage', { language })
-        .then((res) => console.log(res.data))
+        .then((res) => {
+            location.reload()
+            console.log(res.data)
+        })
         .catch((err) => next(err))
+
 }
 
 const selection = (language) => {
